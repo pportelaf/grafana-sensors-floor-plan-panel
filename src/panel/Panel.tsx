@@ -5,7 +5,7 @@ import { css, cx } from 'emotion'
 import { PanelOptions } from 'panel/PanelOptions'
 import { FloorPlanList } from '../components/FloorPlanList/FloorPlanList'
 
-interface Props extends PanelProps<PanelOptions> {}
+interface Props extends PanelProps<PanelOptions> { }
 
 export const Panel: React.FC<Props> = ({
   data,

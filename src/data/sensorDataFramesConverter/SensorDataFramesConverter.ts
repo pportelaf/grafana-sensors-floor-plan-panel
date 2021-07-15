@@ -4,66 +4,66 @@ import { DataFrameOptions } from 'editor/DataFrameEditor/DataFrameOptions'
 import { ThresholdOptions } from 'editor/ThresholdsEditor/ThresholdOptions'
 
 export interface SensorData {
-    value: number
-    formattedValue: string | number
-    threshold: ThresholdOptions
+  value: number
+  formattedValue: string | number
+  threshold: ThresholdOptions
 }
 
 export class SensorDataFramesConverter {
-    private dataFramesWithSettings: Array<DataFrameWithSettings>
+  private dataFramesWithSettings: Array<DataFrameWithSettings>
 
-    constructor(dataFramesWithSettings: Array<DataFrameWithSettings>) {
-        this.dataFramesWithSettings = dataFramesWithSettings
+  constructor(dataFramesWithSettings: Array<DataFrameWithSettings>) {
+    this.dataFramesWithSettings = dataFramesWithSettings
+  }
+
+  public getLastDataList(): Array<SensorData> {
+    let values: Array<SensorData> = []
+
+    this.dataFramesWithSettings.forEach(dataFrameWithSettings => {
+      const sensorData = this.getLastDataFromDataFrame(dataFrameWithSettings)
+
+      if (sensorData) {
+        values.push(sensorData)
+      }
+    })
+
+    return values
+  }
+
+  private getLastDataFromDataFrame(dataFrameWithSettings: DataFrameWithSettings): SensorData | undefined {
+    const field = dataFrameWithSettings.dataFrame.fields.find(field => field.type !== 'time')
+    let value
+    let formattedValue
+    let threshold
+
+    if (!field || field.values.length < 1) {
+      return undefined
     }
 
-    public getLastDataList(): Array<SensorData> {
-        let values: Array<SensorData> = []
+    value = field.values.get(field.values.length - 1)
+    formattedValue = this.formatValue(value, dataFrameWithSettings.settings)
+    threshold = getActiveThreshold(value, dataFrameWithSettings.settings.thresholds)
 
-        this.dataFramesWithSettings.forEach(dataFrameWithSettings => {
-            const sensorData = this.getLastDataFromDataFrame(dataFrameWithSettings)
+    return {
+      value,
+      formattedValue,
+      threshold
+    }
+  }
 
-            if (sensorData) {
-                values.push(sensorData)
-            }
-        })
+  private formatValue(value: any, dataFrameSettings: DataFrameOptions): string | number {
+    const unit = dataFrameSettings.unit || 'none'
+    let valueFormatter: ValueFormatter
+    let valueFormatted
+    let label = dataFrameSettings.label || ''
 
-        return values
+    valueFormatter = getValueFormat(unit)
+    valueFormatted = {
+      prefix: '',
+      suffix: '',
+      ...valueFormatter(value, dataFrameSettings.decimals)
     }
 
-    private getLastDataFromDataFrame (dataFrameWithSettings: DataFrameWithSettings): SensorData | undefined {
-        const field = dataFrameWithSettings.dataFrame.fields.find(field => field.type !== 'time')
-        let value
-        let formattedValue
-        let threshold
-
-        if (!field || field.values.length < 1) {
-            return undefined
-        }
-
-        value = field.values.get(field.values.length - 1)
-        formattedValue = this.formatValue(value, dataFrameWithSettings.settings)
-        threshold = getActiveThreshold(value, dataFrameWithSettings.settings.thresholds)
-
-        return {
-            value,
-            formattedValue,
-            threshold
-        }
-    }
-
-    private formatValue (value: any, dataFrameSettings: DataFrameOptions): string | number {
-        const unit = dataFrameSettings.unit || 'none'
-        let valueFormatter: ValueFormatter
-        let valueFormatted
-        let label = dataFrameSettings.label || ''   
-
-        valueFormatter = getValueFormat(unit)
-        valueFormatted = {
-            prefix: '',
-            suffix: '',
-            ...valueFormatter(value, dataFrameSettings.decimals)
-        }
-
-        return `${label}${valueFormatted.prefix}${valueFormatted.text}${valueFormatted.suffix}`
-    }
+    return `${label}${valueFormatted.prefix}${valueFormatted.text}${valueFormatted.suffix}`
+  }
 }

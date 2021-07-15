@@ -1,5 +1,5 @@
 export interface CanvasOptions {
-    width?: number
-    height?: number
-    zoom?: number
+  width?: number
+  height?: number
+  zoom?: number
 }

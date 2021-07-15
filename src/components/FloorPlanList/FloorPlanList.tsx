@@ -37,8 +37,8 @@ export const FloorPlanList: React.FC<Props> = ({
       <React.Fragment>
         {floorPlanOptions.map(floorPlanOptions => (
           <FloorPlan
-              value={floorPlanOptions}
-              dataFrames={dataFrames}
+            value={floorPlanOptions}
+            dataFrames={dataFrames}
           />
         ))}
       </React.Fragment>
@@ -46,7 +46,7 @@ export const FloorPlanList: React.FC<Props> = ({
   }
 
   const getDebugRect = () => {
-    const rect = 
+    const rect =
       <rect
         x="0"
         y="0"
@@ -57,20 +57,20 @@ export const FloorPlanList: React.FC<Props> = ({
         stroke-width="1"
       />
 
-    return debugMode? rect : undefined
+    return debugMode ? rect : undefined
   }
 
   return (
-      <svg
-        className={cx(styles.svg, 
-            { [styles.svgResponsive]: !debugMode },
-        )}
-        viewBox={`0 0 ${width} ${height}`}
-        {...svgDimensions}
-      >
-        { getFloorPlans() }
-        { getDebugRect() }
-      </svg>
+    <svg
+      className={cx(styles.svg,
+        { [styles.svgResponsive]: !debugMode },
+      )}
+      viewBox={`0 0 ${width} ${height}`}
+      {...svgDimensions}
+    >
+      {getFloorPlans()}
+      {getDebugRect()}
+    </svg>
   )
 }
 
@@ -81,7 +81,7 @@ const getStyles = (theme: GrafanaTheme) => ({
   svg: css`
     position: relative;
   `,
-  svgResponsive: css `
+  svgResponsive: css`
     margin: auto;
     width: 100%;
     height: auto;
@@ -92,4 +92,3 @@ const getStyles = (theme: GrafanaTheme) => ({
     height: 100%;
   `
 })
-  

@@ -70,30 +70,30 @@ export const CollapseEditor: FunctionComponent<Props> = ({
 
   const labelElement = (
     <HorizontalGroup justify="space-between">
-        <div className={cx([style.headerLabel])}>{label}</div>
-        <HorizontalGroup>
-              {showMoveUp &&
-                <IconButton
-                    name="arrow-up"
-                    onClick={(ev) => handleButtonClick(ev, onMoveUp)}
-                    size="sm"
-                />
-              }
-              {showCopy &&
-                <IconButton
-                    name="copy"
-                    onClick={(ev) => handleButtonClick(ev, onCopy)}
-                    size="sm"
-                />
-              }
-              {showRemove &&
-                <IconButton
-                    name="trash-alt"
-                    onClick={(ev) => handleButtonClick(ev, onRemove)}
-                    size="sm"
-                />
-              }
-          </HorizontalGroup>
+      <div className={cx([style.headerLabel])}>{label}</div>
+      <HorizontalGroup>
+        {showMoveUp &&
+          <IconButton
+            name="arrow-up"
+            onClick={(ev) => handleButtonClick(ev, onMoveUp)}
+            size="sm"
+          />
+        }
+        {showCopy &&
+          <IconButton
+            name="copy"
+            onClick={(ev) => handleButtonClick(ev, onCopy)}
+            size="sm"
+          />
+        }
+        {showRemove &&
+          <IconButton
+            name="trash-alt"
+            onClick={(ev) => handleButtonClick(ev, onRemove)}
+            size="sm"
+          />
+        }
+      </HorizontalGroup>
     </HorizontalGroup>
   )
 

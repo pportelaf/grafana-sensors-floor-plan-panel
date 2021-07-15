@@ -5,150 +5,150 @@ import { css, cx } from 'emotion'
 import { Orientation, Side } from 'editor/SensorEditor/SensorOptions'
 
 interface Props {
-    doorWidth: number | undefined
-    height: number | undefined
-    isOpen: boolean
-    offsetX: number | undefined
-    offsetY: number | undefined
-    orientation: Orientation
-    side: Side
-    wallStrokeWidth: number | undefined
-    width: number | undefined
+  doorWidth: number | undefined
+  height: number | undefined
+  isOpen: boolean
+  offsetX: number | undefined
+  offsetY: number | undefined
+  orientation: Orientation
+  side: Side
+  wallStrokeWidth: number | undefined
+  width: number | undefined
 }
 
 export const SensorDoorQuarterCircle: React.FC<Props> = ({
-    doorWidth = 0,
-    height = 0,
-    isOpen,
-    offsetX = 0,
-    offsetY = 0,
-    orientation,
-    side,
-    wallStrokeWidth = 0,
-    width = 0
+  doorWidth = 0,
+  height = 0,
+  isOpen,
+  offsetX = 0,
+  offsetY = 0,
+  orientation,
+  side,
+  wallStrokeWidth = 0,
+  width = 0
 }) => {
-    const styles = useStyles(getStyles)
+  const styles = useStyles(getStyles)
 
-    const getQuarterCircle = () => {
-        switch (orientation) {
-            case Orientation.Bottom:
-                return getBottomHalfCirlcle()
-            case Orientation.Left:
-                return getLeftHalfCirlcle()
-            case Orientation.Right:
-                return getRightHalfCirlcle()
-            default:
-                return getTopHalfCirlcle()
-        }
+  const getQuarterCircle = () => {
+    switch (orientation) {
+      case Orientation.Bottom:
+        return getBottomHalfCirlcle()
+      case Orientation.Left:
+        return getLeftHalfCirlcle()
+      case Orientation.Right:
+        return getRightHalfCirlcle()
+      default:
+        return getTopHalfCirlcle()
+    }
+  }
+
+  const getTopHalfCirlcle = () => {
+    let moveToX = (2 * offsetX) + doorWidth
+    let moveToY = offsetY
+    let x = width
+    let y = height
+
+    if (side === Side.End) {
+      moveToX = offsetX
+      moveToY = height + offsetY
+      y = height * -1
     }
 
-    const getTopHalfCirlcle = () => {
-        let moveToX = (2 * offsetX) + doorWidth
-        let moveToY = offsetY
-        let x = width
-        let y = height
+    return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+  }
 
-        if (side === Side.End) {
-            moveToX = offsetX
-            moveToY = height + offsetY
-            y = height * -1
-        }
+  const getBottomHalfCirlcle = () => {
+    let moveToX = (2 * offsetY) + doorWidth + width
+    let moveToY = wallStrokeWidth
+    let x = width * -1
+    let y = height
 
-        return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+    if (side === Side.End) {
+      moveToX = offsetY + width
+      moveToY = wallStrokeWidth + height
+      y = height * -1
     }
 
-    const getBottomHalfCirlcle = () => {
-        let moveToX = (2 * offsetY) + doorWidth + width
-        let moveToY = wallStrokeWidth
-        let x = width * -1
-        let y = height
+    return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+  }
 
-        if (side === Side.End) {
-            moveToX = offsetY + width
-            moveToY = wallStrokeWidth + height
-            y = height * -1
-        }
+  const getLeftHalfCirlcle = () => {
+    let moveToX = offsetY + height
+    let moveToY = (2 * offsetX) + doorWidth + width
+    let x = height * -1
+    let y = width * -1
 
-        return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+    if (side === Side.End) {
+      moveToX = offsetY
+      moveToY = offsetX + width
+      x = height
+      y = width * -1
     }
 
-    const getLeftHalfCirlcle = () => {
-        let moveToX = offsetY + height
-        let moveToY = (2 * offsetX) + doorWidth + width
-        let x = height * -1
-        let y = width * -1
+    return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+  }
 
-        if (side === Side.End) {
-            moveToX = offsetY
-            moveToY = offsetX + width
-            x = height
-            y = width * -1
-        }
+  const getRightHalfCirlcle = () => {
+    let moveToX = wallStrokeWidth + height
+    let moveToY = (2 * offsetX) + doorWidth
+    let x = height * -1
+    let y = width
 
-        return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+    if (side === Side.End) {
+      moveToX = wallStrokeWidth
+      moveToY = offsetX
+      x = height
     }
 
-    const getRightHalfCirlcle = () => {
-        let moveToX = wallStrokeWidth + height
-        let moveToY = (2 * offsetX) + doorWidth
-        let x = height * -1
-        let y = width
+    return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+  }
 
-        if (side === Side.End) {
-            moveToX = wallStrokeWidth
-            moveToY = offsetX
-            x = height
-        }
+  const getStrokeDashArray = () => {
+    let strokeDashArray: number = -1
 
-        return getQuarterCircleView(moveToX, moveToY, width, height, x, y)
+    if (orientation === Orientation.Bottom || orientation === Orientation.Left) {
+      strokeDashArray = 1
     }
 
-    const getStrokeDashArray = () => {
-        let strokeDashArray: number = -1
-
-        if (orientation === Orientation.Bottom || orientation === Orientation.Left) {
-            strokeDashArray = 1
-        }
-
-        if (side === Side.End) {
-            strokeDashArray = strokeDashArray * -1
-        }
-
-        return strokeDashArray
+    if (side === Side.End) {
+      strokeDashArray = strokeDashArray * -1
     }
 
-    const getQuarterCircleView = (moveToX: number, moveToY: number, radiiX: number, radiiY: number, x: number, y: number) => {
-        const strokeDashArray = getStrokeDashArray()
+    return strokeDashArray
+  }
 
-        return (
-            <path
-                className={cx(styles.doorQuarterCircle,
-                    { [styles.doorOpenQuarterCircle ]: isOpen },
-                    { [styles.doorClosedQuarterCircle(strokeDashArray)]: !isOpen },
-                )}
-                d={`M${moveToX}, ${moveToY} a${radiiX}, ${radiiY} 0 0, 1 ${x}, ${y}`}
-                fill="none"
-                pathLength="1"
-            />
-        )
-    }
+  const getQuarterCircleView = (moveToX: number, moveToY: number, radiiX: number, radiiY: number, x: number, y: number) => {
+    const strokeDashArray = getStrokeDashArray()
 
     return (
-        getQuarterCircle()
+      <path
+        className={cx(styles.doorQuarterCircle,
+          { [styles.doorOpenQuarterCircle]: isOpen },
+          { [styles.doorClosedQuarterCircle(strokeDashArray)]: !isOpen },
+        )}
+        d={`M${moveToX}, ${moveToY} a${radiiX}, ${radiiY} 0 0, 1 ${x}, ${y}`}
+        fill="none"
+        pathLength="1"
+      />
     )
+  }
+
+  return (
+    getQuarterCircle()
+  )
 }
 
 const getStyles = (theme: GrafanaTheme) => {
-    return {
-        doorQuarterCircle: css`
-            stroke-dasharray: 1;
-            transition: stroke-dashoffset 1s ease-in;
-        `,
-        doorOpenQuarterCircle: css`
-            stroke-dashoffset: 0;
-        `,
-        doorClosedQuarterCircle: (strokeDashArray: number) => css`
-            stroke-dashoffset: ${strokeDashArray};
-        `
-      }
+  return {
+    doorQuarterCircle: css`
+      stroke-dasharray: 1;
+      transition: stroke-dashoffset 1s ease-in;
+    `,
+    doorOpenQuarterCircle: css`
+      stroke-dashoffset: 0;
+    `,
+    doorClosedQuarterCircle: (strokeDashArray: number) => css`
+      stroke-dashoffset: ${strokeDashArray};
+    `
+  }
 }
