@@ -38,7 +38,7 @@ export const CanvasEditor: React.FC<Props> = ({
 
   return (
     <React.Fragment>
-      {inlineFieldInputGenerator.getInlineFieldInput('Width', 'number', 'wdith')}
+      {inlineFieldInputGenerator.getInlineFieldInput('Width', 'number', 'width')}
       {inlineFieldInputGenerator.getInlineFieldInput('Height', 'number', 'height')}
 
       <InlineField label="Zoom">
