@@ -1,7 +1,7 @@
 import React from 'react'
-import { DataFrame, GrafanaTheme } from '@grafana/data'
+import { DataFrame, GrafanaTheme2 } from '@grafana/data'
 import { css, cx } from 'emotion'
-import { useStyles, useTheme } from '@grafana/ui'
+import { useStyles2, useTheme2 } from '@grafana/ui'
 import { CanvasOptions } from 'editor/CanvasEditor/CanvasOptions'
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
 import { FloorPlan } from '../FloorPlan/FloorPlan'
@@ -20,8 +20,8 @@ export const FloorPlanList: React.FC<Props> = ({
   width = 0,
   zoom = 0
 }) => {
-  const theme = useTheme()
-  const styles = useStyles(getStyles)
+  const theme = useTheme2()
+  const styles = useStyles2(getStyles)
   const floorPlanOptions: Array<FloorPlanOptions> = value || []
   let svgDimensions = {}
 
@@ -53,7 +53,7 @@ export const FloorPlanList: React.FC<Props> = ({
         width={width}
         height={height}
         fill="none"
-        stroke={theme.colors.text}
+        stroke={theme.colors.text.primary}
         stroke-width="1"
       />
 
@@ -74,7 +74,7 @@ export const FloorPlanList: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => ({
+const getStyles = (theme: GrafanaTheme2) => ({
   wrapper: css`
     position: relative;
   `,

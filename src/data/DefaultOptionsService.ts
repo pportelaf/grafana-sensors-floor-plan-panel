@@ -1,16 +1,16 @@
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
-import { useTheme } from '@grafana/ui'
-import { GrafanaTheme } from '@grafana/data'
+import { useTheme2 } from '@grafana/ui'
+import { GrafanaTheme2 } from '@grafana/data'
 import { Orientation, SensorOptions, SensorType, Side } from 'editor/SensorEditor/SensorOptions'
 
 export class DefaultOptionsService {
   private static instance: DefaultOptionsService
-  private theme: GrafanaTheme
+  private theme: GrafanaTheme2
   private backgroundColor: string
   private borderColor: string
 
   private constructor() {
-    this.theme = useTheme()
+    this.theme = useTheme2()
     this.setColors()
   }
 
@@ -23,13 +23,8 @@ export class DefaultOptionsService {
   }
 
   private setColors() {
-    if (this.theme.isDark) {
-      this.backgroundColor = this.theme.palette.white
-      this.borderColor = this.theme.palette.black
-    } else {
-      this.backgroundColor = this.theme.palette.white
-      this.borderColor = this.theme.palette.black
-    }
+    this.backgroundColor = this.theme.colors.background.primary
+    this.borderColor = this.theme.colors.text.primary
   }
 
   public getFloorPlanDefaultOptions(): FloorPlanOptions {

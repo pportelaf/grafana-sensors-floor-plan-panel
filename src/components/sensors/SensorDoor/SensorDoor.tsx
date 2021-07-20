@@ -1,6 +1,6 @@
 import React from 'react'
-import { GrafanaTheme, Threshold } from '@grafana/data'
-import { useStyles, useTheme } from '@grafana/ui'
+import { GrafanaTheme2, Threshold } from '@grafana/data'
+import { useStyles2, useTheme2 } from '@grafana/ui'
 import { css, cx, keyframes } from 'emotion'
 import { SensorData, SensorDataFramesConverter } from 'data/sensorDataFramesConverter/SensorDataFramesConverter'
 import { DataFrameWithSettings } from 'data/types/DataFrameWithSettings'
@@ -31,8 +31,8 @@ export const SensorDoor: React.FC<Props> = ({
     y = 0,
     width = 0
   } = sensorOptions
-  const styles = useStyles(getStyles)
-  const theme: GrafanaTheme = useTheme()
+  const styles = useStyles2(getStyles)
+  const theme: GrafanaTheme2 = useTheme2()
   const { strokeWidth: wallStrokeWidth = 0, stroke: wallStroke, fill: wallFill } = floorPlanOptions
   const doorWidth = wallStrokeWidth / 2
   const strokeWidth = 1
@@ -43,7 +43,7 @@ export const SensorDoor: React.FC<Props> = ({
   const sensorDataFramesConverter: SensorDataFramesConverter = new SensorDataFramesConverter(dataFramesWithSettings)
 
   let activeThreshold: Threshold = {
-    color: theme.colors.linkDisabled,
+    color: theme.colors.text.disabled,
     value: 0
   }
   let isDoorOpen: boolean = true
@@ -92,8 +92,7 @@ export const SensorDoor: React.FC<Props> = ({
       />
       <g
         className={cx(
-          { [styles.groupDoorOpen(activeThreshold.color)]: (isDoorOpen && !!lastData) },
-          { [styles.groupDoorClosed(activeThreshold.color)]: !isDoorOpen }
+          styles.groupDoor(activeThreshold.color)
         )}
       >
         <SensorDoorView
@@ -123,37 +122,25 @@ export const SensorDoor: React.FC<Props> = ({
   )
 }
 
-const doorOpenBreathing = (thresholdColor: string) => keyframes`
+const doorBreathing = keyframes`
   0% {
-    drop-shadow(0px 0px 2px ${thresholdColor}) drop-shadow(0px 0px 6px ${thresholdColor});
+    drop-shadow(0px 0px 2px) drop-shadow(0px 0px 6px);
   }
 
   70% {
-    filter: drop-shadow(0px 0px 2px ${thresholdColor}) drop-shadow(0px 0px 6px ${thresholdColor}) drop-shadow(0px 0px 7px ${thresholdColor});
+    filter: drop-shadow(0px 0px 2px) drop-shadow(0px 0px 6px) drop-shadow(0px 0px 7px);
   }
 
   100% {
-    filter: drop-shadow(0px 0px 2px ${thresholdColor}) drop-shadow(0px 0px 6px ${thresholdColor}) drop-shadow(0px 0px 9px ${thresholdColor});
+    filter: drop-shadow(0px 0px 2px) drop-shadow(0px 0px 6px) drop-shadow(0px 0px 9px);
   }
 `
 
-const doorClosedBreathing = (thresholdColor: string) => keyframes`
-  from {
-    drop-shadow(0px 0px 2px ${thresholdColor}) drop-shadow(0px 0px 6px ${thresholdColor});
-  }
-
-  to {
-    filter: drop-shadow(0px 0px 2px ${thresholdColor}) drop-shadow(0px 0px 6px ${thresholdColor}) drop-shadow(0px 0px 9px ${thresholdColor});
-  }
-`
-
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
-    groupDoorOpen: (thresholdColor: string) => css`
-      animation: ${doorOpenBreathing(thresholdColor)} 1s ease-in infinite alternate;
-    `,
-    groupDoorClosed: (thresholdColor: string) => css`
-      animation: ${doorClosedBreathing(thresholdColor)} 1.5s ease-in infinite alternate;
+    groupDoor: (thresholdColor: string) => css`
+      animation: ${doorBreathing} 1.5s ease-in infinite alternate;
+      color: ${thresholdColor};
     `,
     doorQuarterCircle: css`
       stroke-dasharray: 1;

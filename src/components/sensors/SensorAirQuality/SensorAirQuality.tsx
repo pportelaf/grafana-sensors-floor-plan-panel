@@ -1,6 +1,6 @@
 import React from 'react'
-import { GrafanaTheme, Threshold } from '@grafana/data'
-import { useStyles, useTheme } from '@grafana/ui'
+import { GrafanaTheme2, Threshold } from '@grafana/data'
+import { useStyles2, useTheme2 } from '@grafana/ui'
 import { css, cx, keyframes } from 'emotion'
 import { SensorData, SensorDataFramesConverter } from 'data/sensorDataFramesConverter/SensorDataFramesConverter'
 import { DataFrameWithSettings } from 'data/types/DataFrameWithSettings'
@@ -24,9 +24,9 @@ export const SensorAirQuality: React.FC<Props> = ({
   const pulseScale: number = 2.3
   const pulseSpeed: string = '3s'
 
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
   const { radius = 0, fontSize = 14, x, y } = sensorOptions
-  const theme = useTheme()
+  const theme = useTheme2()
 
   const pulseRadius: number = radius * pulseScale
   const pulseDiameter: number = pulseRadius * 2
@@ -38,7 +38,7 @@ export const SensorAirQuality: React.FC<Props> = ({
   let lastDataList: Array<SensorData> = []
   let hasData: boolean = false
   let activeThreshold: Threshold = {
-    color: theme.colors.linkDisabled,
+    color: theme.colors.text.disabled,
     value: 0
   }
 
@@ -191,7 +191,7 @@ const disk2Animation = (radius: number, pulseScale: number) => keyframes`
   }
 `
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     wrapper: (fontSize: number) => css`
       font-size: ${fontSize}px;

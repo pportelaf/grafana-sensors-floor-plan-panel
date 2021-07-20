@@ -1,6 +1,6 @@
 import React from 'react'
-import { GrafanaTheme, PanelProps } from '@grafana/data'
-import { useStyles } from '@grafana/ui'
+import { GrafanaTheme2, PanelProps } from '@grafana/data'
+import { useStyles2 } from '@grafana/ui'
 import { css, cx } from 'emotion'
 import { PanelOptions } from 'panel/PanelOptions'
 import { FloorPlanList } from '../components/FloorPlanList/FloorPlanList'
@@ -13,7 +13,7 @@ export const Panel: React.FC<Props> = ({
   options,
   width
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
   const floorPlanOptionsList = options.floorPlanOptionsList || []
 
   return (
@@ -35,7 +35,7 @@ export const Panel: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => ({
+const getStyles = (theme: GrafanaTheme2) => ({
   wrapper: (width: number, height: number) => css`
     position: relative;
     width: ${width}px;

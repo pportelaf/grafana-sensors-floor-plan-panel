@@ -1,7 +1,7 @@
 import React from 'react'
 import { DataFrameOptions } from './DataFrameOptions'
-import { InlineField, Input, Select, UnitPicker, useStyles } from '@grafana/ui'
-import { Labels, StandardEditorContext, GrafanaTheme, DataFrame } from '@grafana/data'
+import { InlineField, Input, Select, UnitPicker, useStyles2 } from '@grafana/ui'
+import { Labels, StandardEditorContext, GrafanaTheme2, DataFrame } from '@grafana/data'
 import { ThresholdsEditor } from '../ThresholdsEditor/ThresholdsEditor'
 import { ThresholdOptions } from 'editor/ThresholdsEditor/ThresholdOptions'
 import { css } from 'emotion'
@@ -21,7 +21,7 @@ export const DataFrameEditor: React.FC<Props> = ({
   value
 
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
   let dataFrameOptions: DataFrameOptions = {
     ...value,
   }
@@ -228,13 +228,13 @@ const filterDataFramesByMeasurement = (dataFrames: Array<DataFrame>, sensorType:
   return dataFrames.filter(dataFrame => dataFrame.name === sensorType)
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     wrapper: css`
-      padding-top: ${theme.spacing.xs};
+      padding-top: ${theme.spacing(0.5)};
     `,
     thresholdsEditor: css`
-      margin-top: ${theme.spacing.md};
+      margin-top: ${theme.spacing(2)};
     `
   }
 }

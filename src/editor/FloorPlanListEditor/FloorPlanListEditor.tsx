@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { GrafanaTheme, StandardEditorProps } from '@grafana/data'
-import { Button, useStyles } from '@grafana/ui'
+import { GrafanaTheme2, StandardEditorProps } from '@grafana/data'
+import { Button, useStyles2 } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
@@ -15,7 +15,7 @@ export const FloorPlanListEditor: React.FC<Props> = ({
   onChange,
   value
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
   const [collapseStateArray, setCollapseStateArray] = useState<boolean[]>([])
 
   let floorPlanOptions: Array<FloorPlanOptions> = value || []
@@ -111,10 +111,10 @@ export const FloorPlanListEditor: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     buttonAdd: css`
-      margin-bottom: ${theme.spacing.sm};
+      margin-bottom: ${theme.spacing(1)};
       width: 100%;
       justify-content: center;
     `

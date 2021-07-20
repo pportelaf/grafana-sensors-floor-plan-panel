@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Input, useStyles, Button, Icon, colors } from '@grafana/ui'
+import { Input, useStyles2, Button, Icon, colors } from '@grafana/ui'
 import { CustomColorPicker } from 'components/CustomColorPicker/CustomColorPicker'
 import { css, cx } from 'emotion'
-import { GrafanaTheme } from '@grafana/data'
+import { GrafanaTheme2 } from '@grafana/data'
 import { ThresholdOptions } from 'editor/ThresholdsEditor/ThresholdOptions'
 
 interface Props {
@@ -23,7 +23,7 @@ export const ThresholdsEditor: React.FC<Props> = ({
   value
 }) => {
   const [thresholdsWithKey, setThresholdsWithKey] = useState<Array<ThresholdOptionsWithKey>>(toThresholdsWithKey(value))
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
   const wrapperClass = cx([styles.wrapper, 'threshold-wrapper', className])
 
   const onAddThreshold = () => {
@@ -221,28 +221,24 @@ const toThresholdsWithKey = (thresholds: Array<ThresholdOptions>) => {
   }))
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     wrapper: css`
       display: flex;
       flex-direction: column;
     `,
     item: css`
-      margin-bottom: ${theme.spacing.sm};
+      margin-bottom: ${theme.spacing(1)};
       &:last-child {
         margin-bottom: 0;
       }
     `,
     addButton: css`
       justify-content: center;
-      margin-bottom: ${theme.spacing.sm};
+      margin-bottom: ${theme.spacing(1)};
     `,
     trashIcon: css`
-      color: ${theme.colors.textWeak};
       cursor: pointer;
-      &:hover {
-        color: ${theme.colors.text};
-      }
     `,
     inputWrapper: css`
       width: 100%;
@@ -250,10 +246,10 @@ const getStyles = (theme: GrafanaTheme) => {
       flex-wrap: nowrap;
     `,
     inputThreshold: css`
-      margin-right: ${theme.spacing.xs};
+      margin-right: ${theme.spacing(0.5)};
     `,
     inputPriority: css`
-      margin-left: ${theme.spacing.xs};
+      margin-left: ${theme.spacing(0.5)};
     `
   }
 }

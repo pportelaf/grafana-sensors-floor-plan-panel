@@ -1,17 +1,17 @@
 import React, { FunctionComponent } from 'react'
-import { GrafanaTheme } from '@grafana/data'
-import { useStyles, HorizontalGroup, IconButton } from '@grafana/ui'
+import { GrafanaTheme2 } from '@grafana/data'
+import { useStyles2, HorizontalGroup, IconButton } from '@grafana/ui'
 import { css, cx } from 'emotion'
 import { CustomCollapse } from '../CustomCollapse/CustomCollapse'
 
-const getStyles = (theme: GrafanaTheme) => ({
+const getStyles = (theme: GrafanaTheme2) => ({
   label: css`
     margin-bottom: 0;
   `,
   headerLabel: css`
     label: collapse__header-label;
-    font-weight: ${theme.typography.weight.semibold};
-    font-size: ${theme.typography.size.md};
+    font-weight: ${theme.typography.fontWeightMedium};
+    font-size: ${theme.typography.fontSize}px;
     width: 100%;
   `,
 })
@@ -58,7 +58,7 @@ export const CollapseEditor: FunctionComponent<Props> = ({
   onMoveUp,
   onRemove
 }) => {
-  const style = useStyles(getStyles)
+  const style = useStyles2(getStyles)
 
   const handleButtonClick = (ev: React.MouseEvent, callback: (() => void) | undefined) => {
     ev.stopPropagation()

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { GrafanaTheme, StandardEditorContext } from '@grafana/data'
-import { useStyles, Button, InlineField } from '@grafana/ui'
+import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
+import { useStyles2, Button, InlineField } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from './FloorPlanOptions'
@@ -21,7 +21,7 @@ export const FloorPlanEditor: React.FC<Props> = ({
   onChange,
   value = {}
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
 
   const [sensorEditorCollapseStates, setSensorEditorCollapseStates] = useState<boolean[]>([])
 
@@ -177,16 +177,16 @@ export const FloorPlanEditor: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     wrapper: css`
-      padding-top: ${theme.spacing.xs};
+      padding-top: ${theme.spacing(0.5)};
     `,
     sensorsTitle: css`
-      margin-top: ${theme.spacing.md};
+      margin-top: ${theme.spacing(2)};
     `,
     buttonAddSensor: css`
-      margin-bottom: ${theme.spacing.sm};
+      margin-bottom: ${theme.spacing(1)};
       width: 100%;
       justify-content: center;
     `

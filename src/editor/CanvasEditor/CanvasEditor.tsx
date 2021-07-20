@@ -17,14 +17,13 @@ export const CanvasEditor: React.FC<Props> = ({
     width: 1000,
     zoom: 100
   }
-  const zoomSliderValue = [canvasOptions.zoom || 0]
   const inlineFieldInputGenerator: InlineFieldInputGenerator<CanvasOptions> = new InlineFieldInputGenerator(canvasOptions, onChange)
 
-  const onChangeZoom = ([value]: any) => {
+  const onChangeZoom = (value: any) => {
     canvasOptions.zoom = value
   }
 
-  const onAfterChangeZoom = ([value]: any) => {
+  const onAfterChangeZoom = (value: any) => {
     canvasOptions.zoom = value
     onChange(canvasOptions)
   }
@@ -47,7 +46,7 @@ export const CanvasEditor: React.FC<Props> = ({
           min={0}
           onAfterChange={onAfterChangeZoom}
           onChange={onChangeZoom}
-          value={zoomSliderValue}
+          value={canvasOptions.zoom}
         />
       </InlineField>
     </React.Fragment>

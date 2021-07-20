@@ -1,6 +1,6 @@
 import React from 'react'
-import { GrafanaTheme } from '@grafana/data'
-import { useStyles, ColorPicker } from '@grafana/ui'
+import { GrafanaTheme2 } from '@grafana/data'
+import { useStyles2, ColorPicker } from '@grafana/ui'
 import { css } from 'emotion'
 
 interface Props {
@@ -15,7 +15,7 @@ export const CustomColorPicker: React.FC<Props> = ({
   enableNamedColors,
   onChange
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
 
   return (
     <div className={styles.colorPickerWrapper}>
@@ -28,12 +28,10 @@ export const CustomColorPicker: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => {
-  const borderColor = theme.isDark ? theme.palette.white : theme.palette.black
-
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     colorPickerWrapper: css`
-      border: 1px solid ${borderColor};
+      border: 1px solid ${theme.colors.border.strong};
       box-sizing: border-box;
       border-radius: 50%;
     `,

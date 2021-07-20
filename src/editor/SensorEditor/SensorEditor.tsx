@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
-import { GrafanaTheme, StandardEditorContext } from '@grafana/data'
-import { RadioButtonGroup, InlineField, useStyles, Button } from '@grafana/ui'
+import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
+import { RadioButtonGroup, InlineField, useStyles2, Button } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { DataFrameOptions } from 'editor/DataFrameEditor/DataFrameOptions'
@@ -75,7 +75,7 @@ export const SensorEditor: React.FC<Props> = ({
   onChange,
   value
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
 
   const [dataFrameEditorCollapseStates, setaDtaFrameEditorCollapseStates] = useState<boolean[]>([])
   let sensorOptions: SensorOptions = {
@@ -302,20 +302,20 @@ export const SensorEditor: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     wrapper: css`
-      padding-top: ${theme.spacing.xs};
+      padding-top: ${theme.spacing(0.5)};
     `,
     nameHorizontalGroupWrapper: css`
       justify-content: space-between;
-      margin-bottom: ${theme.spacing.md};
+      margin-bottom: ${theme.spacing(2)};
     `,
     sensorsTitle: css`
-      margin-top: ${theme.spacing.md};
+      margin-top: ${theme.spacing(2)};
     `,
     buttonAddDataFrames: css`
-      margin-bottom: ${theme.spacing.sm};
+      margin-bottom: ${theme.spacing(1)};
       width: 100%;
       justify-content: center;
     `

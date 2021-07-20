@@ -1,6 +1,6 @@
 import React from 'react'
-import { GrafanaTheme } from '@grafana/data'
-import { useStyles } from '@grafana/ui'
+import { GrafanaTheme2 } from '@grafana/data'
+import { useStyles2 } from '@grafana/ui'
 import { css, cx } from 'emotion'
 import { Orientation, Side } from 'editor/SensorEditor/SensorOptions'
 
@@ -27,7 +27,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
   wallStrokeWidth = 0,
   width = 0
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
 
   const getQuarterCircle = () => {
     switch (orientation) {
@@ -138,7 +138,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     doorQuarterCircle: css`
       stroke-dasharray: 1;

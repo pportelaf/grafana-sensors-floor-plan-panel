@@ -1,16 +1,16 @@
 import React, { FunctionComponent } from 'react'
-import { GrafanaTheme } from '@grafana/data'
-import { useStyles, Icon } from '@grafana/ui'
+import { GrafanaTheme2 } from '@grafana/data'
+import { useStyles2, Icon } from '@grafana/ui'
 import { css, cx } from 'emotion'
 
-const getStyles = (theme: GrafanaTheme) => ({
+const getStyles = (theme: GrafanaTheme2) => ({
   collapse: css`
     label: collapse;
-    margin-bottom: ${theme.spacing.sm};
+    margin-bottom: ${theme.spacing(1)};
   `,
   collapseBody: css`
     label: collapse__body;
-    padding: ${theme.panelPadding}px;
+    padding: ${theme.spacing(0, 1, 1, 1)};
     padding-top: 0;
     flex: 1;
     overflow: hidden;
@@ -28,7 +28,7 @@ const getStyles = (theme: GrafanaTheme) => ({
     position: relative;
     overflow: hidden;
     background: none;
-    margin: ${theme.spacing.xs};
+    margin: ${theme.spacing(0.5)};
   `,
   loaderActive: css`
     label: collapse__loader_active;
@@ -43,7 +43,7 @@ const getStyles = (theme: GrafanaTheme) => ({
       animation: loader 2s cubic-bezier(0.17, 0.67, 0.83, 0.67) 500ms;
       animation-iteration-count: 100;
       left: -25%;
-      background: ${theme.colors.bg1};
+      background: ${theme.colors.background.primary};
     }
     @keyframes loader {
       from {
@@ -58,7 +58,7 @@ const getStyles = (theme: GrafanaTheme) => ({
   `,
   header: css`
     label: collapse__header;
-    padding: ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.md};
+    padding: ${theme.spacing(1)} ${theme.spacing(2)} ${theme.spacing(1)} ${theme.spacing(2)};
     display: flex;
     cursor: inherit;
     transition: all 0.1s linear;
@@ -66,17 +66,17 @@ const getStyles = (theme: GrafanaTheme) => ({
   `,
   headerCollapsed: css`
     label: collapse__header--collapsed;
-    padding: ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.md};
+    padding: ${theme.spacing(1)} ${theme.spacing(2)} ${theme.spacing(1)} ${theme.spacing(2)};
   `,
   headerLabel: css`
     label: collapse__header-label;
-    font-weight: ${theme.typography.weight.semibold};
-    font-size: ${theme.typography.size.md};
+    font-weight: ${theme.typography.fontWeightMedium};
+    font-size: ${theme.typography.fontSize}px;
     width: 100%;
   `,
   icon: css`
     label: collapse__icon;
-    margin-right: ${theme.typography.size.sm};
+    margin-right: ${theme.spacing(1)};
   `
 })
 
@@ -104,7 +104,7 @@ export const CustomCollapse: FunctionComponent<Props> = ({
   className,
   children,
 }) => {
-  const style = useStyles(getStyles)
+  const style = useStyles2(getStyles)
   const onClickToggle = () => {
     if (onToggle) {
       onToggle(!isOpen)

@@ -1,6 +1,6 @@
 import React from 'react'
-import { GrafanaTheme } from '@grafana/data'
-import { useStyles } from '@grafana/ui'
+import { GrafanaTheme2 } from '@grafana/data'
+import { useStyles2 } from '@grafana/ui'
 import { css, cx } from 'emotion'
 import { Orientation, Side } from 'editor/SensorEditor/SensorOptions'
 
@@ -27,7 +27,7 @@ export const SensorDoorView: React.FC<Props> = ({
   offsetX = 0,
   offsetY = 0
 }) => {
-  const styles = useStyles(getStyles)
+  const styles = useStyles2(getStyles)
   const isVerticalOrientation = orientation === Orientation.Top || orientation === Orientation.Bottom
 
   const getDoor = () => {
@@ -150,7 +150,7 @@ export const SensorDoorView: React.FC<Props> = ({
   )
 }
 
-const getStyles = (theme: GrafanaTheme) => {
+const getStyles = (theme: GrafanaTheme2) => {
   return {
     door: (transformOrigin: string) => css`
       transform-origin: ${transformOrigin};
