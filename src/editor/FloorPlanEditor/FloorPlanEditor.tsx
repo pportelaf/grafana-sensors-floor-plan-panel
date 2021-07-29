@@ -148,13 +148,19 @@ export const FloorPlanEditor: React.FC<Props> = ({
       {inlineFieldInputGenerator.getInlineFieldInput('Width', 'number', 'width')}
       {inlineFieldInputGenerator.getInlineFieldInput('Height', 'number', 'height')}
       {inlineFieldInputGenerator.getInlineFieldInput('Wall width', 'number', 'strokeWidth')}
-      <InlineField label="Wall color">
+      <InlineField
+        className={styles.inlineFieldColorPicker}
+        label="Wall color"
+      >
         <CustomColorPicker
           color={stroke}
           onChange={onChangeStroke}
         />
       </InlineField>
-      <InlineField label="Background color">
+      <InlineField
+        className={styles.inlineFieldColorPicker}
+        label="Background color"
+      >
         <CustomColorPicker
           color={fill}
           onChange={onChangeFill}
@@ -181,6 +187,9 @@ const getStyles = (theme: GrafanaTheme2) => {
   return {
     wrapper: css`
       padding-top: ${theme.spacing(0.5)};
+    `,
+    inlineFieldColorPicker: css`
+      align-items: center;
     `,
     sensorsTitle: css`
       margin-top: ${theme.spacing(2)};
