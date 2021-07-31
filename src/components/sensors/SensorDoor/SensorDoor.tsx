@@ -71,55 +71,91 @@ export const SensorDoor: React.FC<Props> = ({
   setIsDoorOpen()
   setActiveThreshold()
 
-  return (
-    <g
-      fill={fill}
-      stroke={wallStroke}
-      stroke-width={strokeWidth}
-      transform={`translate(${x}, ${y})`}
-    >
-      <SensorDoorWallOverlay
-        doorWidth={doorWidth}
-        fill={wallFill}
-        height={height}
-        offsetX={offsetX}
-        orientation={orientation}
-        side={side}
-        strokeWidth={wallOverlayStrokeWidth}
-        wallStrokeWidth={wallStrokeWidth}
+  const getLinkHoverArea = () => {
+    return (
+      <rect
+        x={x}
+        y={y}
         width={width}
-
+        height={height}
+        fill="transparent"
+        stroke="none"
       />
+    )
+  }
+
+  const getContent = () => {
+    return (
       <g
-        className={cx(
-          styles.groupDoor(activeThreshold.color)
-        )}
+        fill={fill}
+        stroke={wallStroke}
+        stroke-width={strokeWidth}
+        transform={`translate(${x}, ${y})`}
       >
-        <SensorDoorView
+        <SensorDoorWallOverlay
           doorWidth={doorWidth}
+          fill={wallFill}
           height={height}
-          isOpen={isDoorOpen}
           offsetX={offsetX}
-          offsetY={offsetY}
           orientation={orientation}
           side={side}
+          strokeWidth={wallOverlayStrokeWidth}
           wallStrokeWidth={wallStrokeWidth}
           width={width}
+
         />
-        <SensorDoorQuarterCircle
-          doorWidth={doorWidth}
-          height={height}
-          isOpen={isDoorOpen}
-          offsetX={offsetX}
-          offsetY={offsetY}
-          orientation={orientation}
-          side={side}
-          wallStrokeWidth={wallStrokeWidth}
-          width={width}
-        />
+        <g
+          className={cx(
+            styles.groupDoor(activeThreshold.color)
+          )}
+        >
+          <SensorDoorView
+            doorWidth={doorWidth}
+            height={height}
+            isOpen={isDoorOpen}
+            offsetX={offsetX}
+            offsetY={offsetY}
+            orientation={orientation}
+            side={side}
+            wallStrokeWidth={wallStrokeWidth}
+            width={width}
+          />
+          <SensorDoorQuarterCircle
+            doorWidth={doorWidth}
+            height={height}
+            isOpen={isDoorOpen}
+            offsetX={offsetX}
+            offsetY={offsetY}
+            orientation={orientation}
+            side={side}
+            wallStrokeWidth={wallStrokeWidth}
+            width={width}
+          />
+        </g>
       </g>
-    </g>
-  )
+    )
+  }
+
+  const getRender = () => {
+    const content = getContent()
+  
+    if (sensorOptions.link) {
+      return (
+        <a
+          className={styles.link}
+          href={sensorOptions.link}
+          target="_blank"
+        >
+          { getLinkHoverArea() }
+          { content }
+        </a>
+      )
+    }
+
+    return content
+  }
+
+  return getRender()
 }
 
 const doorBreathing = keyframes`
@@ -151,6 +187,13 @@ const getStyles = (theme: GrafanaTheme2) => {
     `,
     doorClosedQuarterCircle: css`
       stroke-dashoffset: 1;
-    `
+    `,
+    link: css`
+      transition: filter 0.1s ease-in 0s, transform 0.1s ease-in 0s;
+      &:hover {
+        filter: drop-shadow(8px 8px 4px);
+        transform: translate(-8px, -8px);
+      }
+    `,
   }
 }

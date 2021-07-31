@@ -57,34 +57,56 @@ export const SensorWaterLevel: React.FC<Props> = ({
 
   setLastData()
 
-  return (
-    <g
-      fill={fill}
-      stroke={wallStroke}
-      stroke-width={strokeWidth}
-      transform={`translate(${x}, ${y})`}
-    >
-      <rect
-        x="0"
-        y={rectY}
-        width={width}
-        height={height}
-        strokeWidth={strokeWidth}
+  const getContent = () => {
+    return (
+      <g
+        fill={fill}
         stroke={wallStroke}
-        fill={theme.v1.colors.bgBlue1}
-      />
-      <text
-        className={styles.text(fontSize, activeThreshold.color)}
-        x={textX}
-        y={textY}
-        stroke="none"
-        textAnchor="middle"
-        dominantBaseline="middle"
+        stroke-width={strokeWidth}
+        transform={`translate(${x}, ${y})`}
       >
-        {lastDataFormatted}
-      </text>
-    </g>
-  )
+        <rect
+          x="0"
+          y={rectY}
+          width={width}
+          height={height}
+          strokeWidth={strokeWidth}
+          stroke={wallStroke}
+          fill={theme.v1.colors.bgBlue1}
+        />
+        <text
+          className={styles.text(fontSize, activeThreshold.color)}
+          x={textX}
+          y={textY}
+          stroke="none"
+          textAnchor="middle"
+          dominantBaseline="middle"
+        >
+          {lastDataFormatted}
+        </text>
+      </g>
+    )
+  }
+
+  const getRender = () => {
+    const content = getContent()
+
+    if (sensorOptions.link) {
+      return (
+        <a
+          className={styles.link}
+          href={sensorOptions.link}
+          target="_blank"
+        >
+          { content }
+        </a>
+      )
+    }
+
+    return content
+  }
+
+  return getRender()
 }
 
 const getStyles = (theme: GrafanaTheme2) => {
@@ -92,6 +114,13 @@ const getStyles = (theme: GrafanaTheme2) => {
     text: (fontSize: number, thresholdColor: string) => css`
       fill: ${thresholdColor};
       font-size: ${fontSize}px;
+    `,
+    link: css`
+      transition: filter 0.1s ease-in 0s, transform 0.1s ease-in 0s;
+      &:hover {
+        filter: drop-shadow(8px 8px 4px);
+        transform: translate(-8px, -8px);
+      }
     `,
   }
 }

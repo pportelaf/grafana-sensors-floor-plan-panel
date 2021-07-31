@@ -25,7 +25,7 @@ export const SensorAirQuality: React.FC<Props> = ({
   const pulseSpeed: string = '3s'
 
   const styles = useStyles2(getStyles)
-  const { radius = 0, fontSize = 14, x, y } = sensorOptions
+  const { radius = 0, fontSize = 14, x = 0, y = 0 } = sensorOptions
   const theme = useTheme2()
 
   const pulseRadius: number = radius * pulseScale
@@ -63,6 +63,51 @@ export const SensorAirQuality: React.FC<Props> = ({
   setLastDataList()
   setActiveThreshold()
   const textLines = lastDataList.length
+
+  const getCircles = () => {
+    return (
+      <g
+        className={styles.circleWrapperWithLink}
+      >
+        <circle
+          className={
+            cx(styles.circle(activeThreshold.color),
+            )}
+          cx="0"
+          cy="0"
+          r={radius}
+        />
+  
+        <circle
+          className={
+            cx(styles.disk1(activeThreshold.color, radius, pulseScale, pulseSpeed),
+              {
+                [styles.diskNoData]: !hasData
+              }
+            )}
+          cx="0"
+          cy="0"
+          fill="none"
+          r={pulseRadius}
+          stroke-width="2"
+        />
+  
+        <circle
+          className={
+            cx(styles.disk2(activeThreshold.color, radius, pulseScale, pulseSpeed),
+              {
+                [styles.diskNoData]: !hasData
+              }
+            )}
+          cx="0"
+          cy="0"
+          fill="none"
+          r={pulseRadius}
+          stroke-width="2"
+        />
+      </g>
+    )
+  }
 
   const getDataValuesText = () => {
     let textY = 0
@@ -105,51 +150,56 @@ export const SensorAirQuality: React.FC<Props> = ({
     )
   }
 
-  return (
-    <g
-      className={styles.wrapper(fontSize)}
-      fill={fill}
-      stroke="none"
-      transform={`translate(${x}, ${y})`}
-    >
-      <circle
-        className={
-          cx(styles.circle(activeThreshold.color),
-          )}
-        cx="0"
-        cy="0"
-        r={radius}
-      />
-      <circle
-        className={
-          cx(styles.disk1(activeThreshold.color, radius, pulseScale, pulseSpeed),
-            {
-              [styles.diskNoData]: !hasData
-            }
-          )}
-        cx="0"
-        cy="0"
-        fill="none"
-        r={pulseRadius}
-        stroke-width="2"
-      />
-      <circle
-        className={
-          cx(styles.disk2(activeThreshold.color, radius, pulseScale, pulseSpeed),
-            {
-              [styles.diskNoData]: !hasData
-            }
-          )}
-        cx="0"
-        cy="0"
-        fill="none"
-        r={pulseRadius}
-        stroke-width="2"
-      />
+  const getLinkHoverArea = () => {
+    const areaWidth = pulseDiameter + 20
 
-      {getDataValuesText()}
-    </g>
-  )
+    return (
+      <rect
+        x={x -(areaWidth / 2)}
+        y={y -(areaWidth / 2)}
+        width={areaWidth}
+        height={areaWidth}
+        fill="transparent"
+        stroke="none"
+      />
+    )
+  }
+
+  const getContent = () => {
+    return (
+      <g
+        className={styles.wrapper(fontSize)}
+        fill={fill}
+        stroke="none"
+        transform={`translate(${x}, ${y})`}
+      >
+        { getCircles() }
+  
+        { getDataValuesText() }
+      </g>
+    )
+  }
+
+  const getRender = () => {
+    const content = getContent()
+
+    if (sensorOptions.link) {
+      return (
+        <a
+          className={styles.link}
+          href={sensorOptions.link}
+          target="_blank"
+        >
+          { getLinkHoverArea() }
+          { content }
+        </a>
+      )
+    }
+
+    return content
+  }
+
+  return getRender()
 }
 
 
@@ -193,23 +243,20 @@ const disk2Animation = (radius: number, pulseScale: number) => keyframes`
 
 const getStyles = (theme: GrafanaTheme2) => {
   return {
+    link: css`
+      transition: transform 0.1s ease-in 0s;
+      &:hover {
+        transform: translate(-8px, -8px);
+      }
+    `,
     wrapper: (fontSize: number) => css`
       font-size: ${fontSize}px;
     `,
-    text: css`
-      transform-box: fill-box;
-    `,
-    textTop: (textLines: number, circleRadius: number) => css`
-      transform: translate(-50%, calc(-${textLines}em - ${circleRadius + (circleRadius / 2)}px));
-    `,
-    textLeft: (circleRadius: number) => css`
-      transform: translate(calc(-100% - ${circleRadius + (circleRadius / 2)}px), calc(-50% + ${circleRadius}px));
-    `,
-    textCenterHorizontal: css`
-      transform: translate(-50%, 0);
-    `,
-    textCenterVertical: (circleRadius: number) => css`
-      transform: translate(0, calc(-50% + ${circleRadius}px));
+    circleWrapperWithLink: css`
+      transition: filter 0.1s ease-in 0s;
+      a:hover & {
+        filter: drop-shadow(8px 8px 4px);
+      }
     `,
     circle: (color: string) => css`
       fill: ${color};
@@ -226,6 +273,21 @@ const getStyles = (theme: GrafanaTheme2) => {
     `,
     diskNoData: css`
       animation: none;
+    `,
+    text: css`
+      transform-box: fill-box;
+    `,
+    textTop: (textLines: number, circleRadius: number) => css`
+      transform: translate(-50%, calc(-${textLines}em - ${circleRadius + (circleRadius / 2)}px));
+    `,
+    textLeft: (circleRadius: number) => css`
+      transform: translate(calc(-100% - ${circleRadius + (circleRadius / 2)}px), calc(-50% + ${circleRadius}px));
+    `,
+    textCenterHorizontal: css`
+      transform: translate(-50%, 0);
+    `,
+    textCenterVertical: (circleRadius: number) => css`
+      transform: translate(0, calc(-50% + ${circleRadius}px));
     `
   }
 }

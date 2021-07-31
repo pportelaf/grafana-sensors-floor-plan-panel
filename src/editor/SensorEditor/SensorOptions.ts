@@ -14,8 +14,8 @@ export enum Side {
 
 export enum SensorType {
   AirQuality = 'air-quality',
-  WaterLevel = 'water-level',
-  Door = 'door'
+  Door = 'door',
+  WaterLevel = 'water-level'
 }
 
 export interface VectorGraphicOptions {
@@ -31,11 +31,12 @@ export interface VectorGraphicOptions {
 
 
 export interface SensorOptions extends VectorGraphicOptions {
-  name: string
-  type: SensorType
-  dataFramesOptionsList?: Array<DataFrameOptions>
   color?: string
+  dataFramesOptionsList?: Array<DataFrameOptions>
   fontSize?: number
+  link?: string
+  name: string
   orientation?: Orientation
   side?: Side
+  type: SensorType
 }

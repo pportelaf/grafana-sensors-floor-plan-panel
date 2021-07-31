@@ -268,6 +268,7 @@ export const SensorEditor: React.FC<Props> = ({
         />
       </InlineField>
 
+      {inlineFieldInputGenerator.getInlineFieldInput('Link', 'string', 'link')}
       {inlineFieldInputGenerator.getInlineFieldInput('X', 'number', 'x')}
       {inlineFieldInputGenerator.getInlineFieldInput('Y', 'number', 'y')}
       {isInputVisible('width') && inlineFieldInputGenerator.getInlineFieldInput('Width', 'number', 'width')}
