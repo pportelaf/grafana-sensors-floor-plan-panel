@@ -66,6 +66,7 @@ export const SensorWaterLevel: React.FC<Props> = ({
         transform={`translate(${x}, ${y})`}
       >
         <rect
+          className={styles.rect}
           x="0"
           y={rectY}
           width={width}
@@ -116,11 +117,16 @@ const getStyles = (theme: GrafanaTheme2) => {
       font-size: ${fontSize}px;
     `,
     link: css`
-      transition: filter 0.1s ease-in 0s, transform 0.1s ease-in 0s;
+      transition: transform 0.1s ease-in 0s;
       &:hover {
-        filter: drop-shadow(8px 8px 4px);
         transform: translate(-8px, -8px);
       }
     `,
+    rect: css`
+      transition: filter 0.1s ease-in 0s;
+      a:hover & {
+        filter: drop-shadow(8px 8px 4px);
+      }
+    `
   }
 }
