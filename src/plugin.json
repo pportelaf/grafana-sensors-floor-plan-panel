@@ -1,13 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "farm-monitoring-panel",
-  "id": "innogando-farm-monitoring-panel",
+  "name": "Floor plan",
+  "id": "grafana-floor-plan-panel",
   "info": {
-    "description": "Panel for display farm sensors",
+    "description": "Panel for display a floor plan with sensors",
     "author": {
-      "name": "pablo.portela.francos",
-      "url": ""
+      "name": "pportelaf",
+      "url": "https://github.com/pportelaf"
     },
     "keywords": [],
     "logos": {
