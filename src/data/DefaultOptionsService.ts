@@ -8,10 +8,12 @@ export class DefaultOptionsService {
   private theme: GrafanaTheme2
   private backgroundColor: string
   private borderColor: string
+  private fontSize: number
 
   private constructor() {
     this.theme = useTheme2()
     this.setColors()
+    this.fontSize = 16
   }
 
   public static getInstance(): DefaultOptionsService {
@@ -53,7 +55,7 @@ export class DefaultOptionsService {
     switch (sensorType) {
       case SensorType.AirQuality:
         radius = 10
-        fontSize = 16
+        fontSize = this.fontSize
         orientation = Orientation.Left
         break
       case SensorType.WaterLevel:
@@ -77,6 +79,13 @@ export class DefaultOptionsService {
       side,
       radius,
       fontSize
+    }
+  }
+
+  public getLabelDefaultOptions() {
+    return {
+      color: this.borderColor,
+      fontSize: this.fontSize
     }
   }
 }

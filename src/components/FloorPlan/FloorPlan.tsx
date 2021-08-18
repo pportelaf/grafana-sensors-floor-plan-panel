@@ -1,5 +1,7 @@
 import React from 'react'
-import { DataFrame } from '@grafana/data'
+import { DataFrame, GrafanaTheme2 } from '@grafana/data'
+import { useStyles2 } from '@grafana/ui'
+import { css } from 'emotion'
 import { DataFrameOptions } from 'editor/DataFrameEditor/DataFrameOptions'
 import { DataFrameWithSettings } from 'data/types/DataFrameWithSettings'
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
@@ -14,6 +16,7 @@ export const FloorPlan: React.FC<Props> = ({
   dataFrames,
   value
 }) => {
+  const styles = useStyles2(getStyles)
   const strokeWidth = value.strokeWidth || 0
   let x = value.x || 0
   let y = value.y || 0
@@ -61,6 +64,24 @@ export const FloorPlan: React.FC<Props> = ({
     )
   }
 
+  const getLabel = () => {
+    const width = value.width || 0
+    const color = value.labelOptions?.color || ''
+    const labelX = (width / 2) + x
+    const fontSize = value.labelOptions?.fontSize || 0
+
+    return (
+      <text
+        className={styles.label(fontSize, color)}
+        y={value.labelOptions?.y}
+        x={labelX}
+        text-anchor="middle"
+      >
+        {value.name}
+      </text>
+    )
+  }
+
   return (
     <React.Fragment>
       <rect
@@ -74,6 +95,16 @@ export const FloorPlan: React.FC<Props> = ({
       />
 
       {getSensorList()}
+      {value.labelOptions && getLabel()}
     </React.Fragment>
   )
+}
+
+const getStyles = (theme: GrafanaTheme2) => {
+  return {
+    label: (fontSize: number, color: string) => css`
+      font-size: ${fontSize}px;
+      fill: ${color};
+    `
+  }
 }

@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
-import { useStyles2, Button, InlineField } from '@grafana/ui'
+import { useStyles2, Button, InlineField, InlineSwitch } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from './FloorPlanOptions'
+import { LabelOptions } from 'editor/LabelEditor/LabelOptions'
 import { SensorOptions } from 'editor/SensorEditor/SensorOptions'
 import { CollapseEditor } from 'components/CollapseEditor/CollapseEditor'
 import { CustomColorPicker } from 'components/CustomColorPicker/CustomColorPicker'
+import { LabelEditor } from 'editor/LabelEditor/LabelEditor'
 import { SensorEditor } from 'editor/SensorEditor/SensorEditor'
 import { InlineFieldInputGenerator } from 'components/utils/InlineFieldInputGenerator'
 
@@ -59,6 +61,25 @@ export const FloorPlanEditor: React.FC<Props> = ({
 
   const onChangeStroke = (color: string) => {
     floorPlanOptions.stroke = color
+    onChange(floorPlanOptions)
+  }
+
+  const onChangeDisplayName = (event: any) => {
+    if (event.currentTarget?.checked) {
+      floorPlanOptions.labelOptions = {...
+        defaultOptionsService.getLabelDefaultOptions(),
+        y: floorPlanOptions.y
+      }
+    } else {
+      floorPlanOptions.labelOptions = undefined
+    }
+
+    onChange(floorPlanOptions)
+  }
+
+  const onChangeLabelOptions = (labelOptions: LabelOptions) => {
+    floorPlanOptions.labelOptions = labelOptions
+
     onChange(floorPlanOptions)
   }
 
@@ -115,6 +136,17 @@ export const FloorPlanEditor: React.FC<Props> = ({
     onChange(floorPlanOptions)
   }
 
+  const getLabelEditor = () => {
+    const labelOptions = floorPlanOptions.labelOptions || defaultOptionsService.getLabelDefaultOptions()
+
+    return (
+      <LabelEditor
+        value={labelOptions}
+        onChange={onChangeLabelOptions}
+      />
+    )
+  }
+
   const getSensorEditorListComonent = () => {
     return sensorOptionsList.map((sensorOptions, index) => {
       return (
@@ -143,6 +175,17 @@ export const FloorPlanEditor: React.FC<Props> = ({
   return (
     <div className={styles.wrapper}>
       {inlineFieldInputGenerator.getInlineFieldInput('Name', 'text', 'name')}
+      <InlineField
+        label="Display name"
+      >
+        <InlineSwitch
+          css=""
+          value={!!value.labelOptions}
+          onChange={onChangeDisplayName}
+        />
+      </InlineField>
+      {value.labelOptions && getLabelEditor()}
+
       {inlineFieldInputGenerator.getInlineFieldInput('X', 'number', 'x')}
       {inlineFieldInputGenerator.getInlineFieldInput('Y', 'number', 'y')}
       {inlineFieldInputGenerator.getInlineFieldInput('Width', 'number', 'width')}
