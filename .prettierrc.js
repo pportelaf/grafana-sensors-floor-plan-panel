@@ -1,6 +1,3 @@
 module.exports = {
-  "trailingComma": "es5",
-  "singleQuote": true,
-  "printWidth": 120,
-  "semi": false
+  ...require("./node_modules/@grafana/toolkit/src/config/prettier.plugin.config.json"),
 };
