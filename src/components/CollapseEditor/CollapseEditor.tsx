@@ -56,7 +56,7 @@ export const CollapseEditor: FunctionComponent<Props> = ({
   showMoveUp,
   onCopy,
   onMoveUp,
-  onRemove
+  onRemove,
 }) => {
   const style = useStyles2(getStyles)
 
@@ -72,40 +72,23 @@ export const CollapseEditor: FunctionComponent<Props> = ({
     <HorizontalGroup justify="space-between">
       <div className={cx([style.headerLabel])}>{label}</div>
       <HorizontalGroup>
-        {showMoveUp &&
-          <IconButton
-            name="arrow-up"
-            onClick={(ev) => handleButtonClick(ev, onMoveUp)}
-            size="sm"
-          />
-        }
-        {showCopy &&
-          <IconButton
-            name="copy"
-            onClick={(ev) => handleButtonClick(ev, onCopy)}
-            size="sm"
-          />
-        }
-        {showRemove &&
-          <IconButton
-            name="trash-alt"
-            onClick={(ev) => handleButtonClick(ev, onRemove)}
-            size="sm"
-          />
-        }
+        {showMoveUp && <IconButton name="arrow-up" onClick={(ev) => handleButtonClick(ev, onMoveUp)} size="sm" />}
+        {showCopy && <IconButton name="copy" onClick={(ev) => handleButtonClick(ev, onCopy)} size="sm" />}
+        {showRemove && <IconButton name="trash-alt" onClick={(ev) => handleButtonClick(ev, onRemove)} size="sm" />}
       </HorizontalGroup>
     </HorizontalGroup>
   )
 
   return (
     <CustomCollapse
-      children={children}
       className={className}
       collapsible={collapsible}
       isOpen={isOpen}
       label={labelElement}
       loading={loading}
       onToggle={onToggle}
-    />
+    >
+      {children}
+    </CustomCollapse>
   )
 }

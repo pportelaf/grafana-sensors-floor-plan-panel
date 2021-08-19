@@ -22,7 +22,7 @@ export const SensorDoorWallOverlay: React.FC<Props> = ({
   side,
   strokeWidth,
   wallStrokeWidth = 0,
-  width = 0
+  width = 0,
 }) => {
   const isVerticalOrientation = orientation === Orientation.Top || orientation === Orientation.Bottom
 
@@ -35,8 +35,8 @@ export const SensorDoorWallOverlay: React.FC<Props> = ({
   }
 
   const getWallOverlayVertical = () => {
-    const wallOverlayOffset = (2 * offsetX) + (strokeWidth / 2)
-    const wallOverlayWidth = width - (2 * offsetX)
+    const wallOverlayOffset = 2 * offsetX + strokeWidth / 2
+    const wallOverlayWidth = width - 2 * offsetX
     let x = doorWidth + wallOverlayOffset
     let y = height
 
@@ -52,8 +52,8 @@ export const SensorDoorWallOverlay: React.FC<Props> = ({
   }
 
   const getWallOverlayHorizontal = () => {
-    const wallOverlayOffset = (2 * offsetX) + (strokeWidth / 2)
-    const wallOverlayHeight = width - (2 * offsetX)
+    const wallOverlayOffset = 2 * offsetX + strokeWidth / 2
+    const wallOverlayHeight = width - 2 * offsetX
     let x = width
     let y = doorWidth + wallOverlayOffset
 
@@ -69,20 +69,8 @@ export const SensorDoorWallOverlay: React.FC<Props> = ({
   }
 
   const getWallOverlayView = (x: number, y: number, width: number, height: number) => {
-    return (
-      <rect
-        fill={fill}
-        height={height}
-        x={x}
-        y={y}
-        stroke={fill}
-        stroke-width={strokeWidth}
-        width={width}
-      />
-    )
+    return <rect fill={fill} height={height} x={x} y={y} stroke={fill} strokeWidth={strokeWidth} width={width} />
   }
 
-  return (
-    getWallOverlay()
-  )
+  return getWallOverlay()
 }

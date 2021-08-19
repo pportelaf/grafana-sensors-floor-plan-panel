@@ -8,43 +8,40 @@ import { ThresholdOptions } from 'editor/ThresholdsEditor/ThresholdOptions'
 interface Props {
   className: string
   hasPriority?: boolean
-  onChange: (value?: Array<ThresholdOptions>) => void
-  value: Array<ThresholdOptions>
+  onChange: (value?: ThresholdOptions[]) => void
+  value: ThresholdOptions[]
 }
 
 interface ThresholdOptionsWithKey extends ThresholdOptions {
   key: number
 }
 
-export const ThresholdsEditor: React.FC<Props> = ({
-  className,
-  hasPriority,
-  onChange,
-  value
-}) => {
-  const [thresholdsWithKey, setThresholdsWithKey] = useState<Array<ThresholdOptionsWithKey>>(toThresholdsWithKey(value))
+export const ThresholdsEditor: React.FC<Props> = ({ className, hasPriority, onChange, value }) => {
+  const [thresholdsWithKey, setThresholdsWithKey] = useState<ThresholdOptionsWithKey[]>(toThresholdsWithKey(value))
   const styles = useStyles2(getStyles)
   const wrapperClass = cx([styles.wrapper, 'threshold-wrapper', className])
 
   const onAddThreshold = () => {
     let key = 0
     let newValue = 0
-    const color = colors.filter(foundColor => !thresholdsWithKey.some(({ color }) => color === foundColor))[1]
+    const color = colors.filter((foundColor) => !thresholdsWithKey.some(({ color }) => color === foundColor))[1]
     let newThresholdsWithKey
 
     if (thresholdsWithKey.length > 1) {
       newValue = thresholdsWithKey[thresholdsWithKey.length - 1].value + 10
     }
 
-    key = thresholdsWithKey.reduce((maxKey, { key: currentKey }) => currentKey > maxKey ? currentKey : maxKey, key) + 1
+    key = thresholdsWithKey.reduce((maxKey, { key: currentKey }) => (currentKey > maxKey ? currentKey : maxKey), key)
+
+    key = key + 1
 
     newThresholdsWithKey = [
       ...thresholdsWithKey,
       {
         value: newValue,
         color,
-        key
-      }
+        key,
+      },
     ]
 
     sortThresholds(newThresholdsWithKey)
@@ -58,7 +55,7 @@ export const ThresholdsEditor: React.FC<Props> = ({
     const value = isNaN(parsedValue) ? '' : parsedValue
     let newThresholdsWithKey
 
-    newThresholdsWithKey = thresholdsWithKey.map(thresholdWithKeyFound => {
+    newThresholdsWithKey = thresholdsWithKey.map((thresholdWithKeyFound) => {
       if (thresholdWithKeyFound.key === thresholdWithKey.key) {
         thresholdWithKeyFound = { ...thresholdWithKeyFound, value: value as number }
       }
@@ -71,7 +68,7 @@ export const ThresholdsEditor: React.FC<Props> = ({
   }
 
   const onChangeThresholdColor = (color: string, thresholdWithKey: ThresholdOptionsWithKey) => {
-    let newThresholdsWithKey = thresholdsWithKey.map(thresholdWithKeyFound => {
+    let newThresholdsWithKey = thresholdsWithKey.map((thresholdWithKeyFound) => {
       if (thresholdWithKeyFound.key === thresholdWithKey.key) {
         thresholdWithKeyFound = { ...thresholdWithKeyFound, color }
       }
@@ -87,7 +84,7 @@ export const ThresholdsEditor: React.FC<Props> = ({
       priority = Number(priority)
     }
 
-    let newThresholdsWithKey = thresholdsWithKey.map(thresholdWithKeyFound => {
+    let newThresholdsWithKey = thresholdsWithKey.map((thresholdWithKeyFound) => {
       if (thresholdWithKeyFound.key === thresholdWithKey.key) {
         thresholdWithKeyFound = { ...thresholdWithKeyFound, priority }
       }
@@ -102,11 +99,7 @@ export const ThresholdsEditor: React.FC<Props> = ({
     setThresholdsWithKey(thresholdsWithKey.filter(({ key }) => key !== thresholdWithKey.key))
   }
 
-  const onChangeThresholdsWithKey = () => {
-    onChange(thresholdsWithKey.map(({ key, ...threshold }) => ({ ...threshold })))
-  }
-
-  const sortThresholds = (thresholdsWithKey: Array<ThresholdOptionsWithKey>): Array<ThresholdOptionsWithKey> => {
+  const sortThresholds = (thresholdsWithKey: ThresholdOptionsWithKey[]): ThresholdOptionsWithKey[] => {
     return thresholdsWithKey.sort((a: ThresholdOptionsWithKey, b: ThresholdOptionsWithKey) => {
       return a.value - b.value
     })
@@ -123,29 +116,14 @@ export const ThresholdsEditor: React.FC<Props> = ({
   }
 
   const getRemoveIcon = (thresholdsWithKey: ThresholdOptionsWithKey) => {
-    return (
-      <Icon
-        className={styles.trashIcon}
-        name="trash-alt"
-        onClick={() => onRemoveThreshold(thresholdsWithKey)}
-      />
-    )
+    return <Icon className={styles.trashIcon} name="trash-alt" onClick={() => onRemoveThreshold(thresholdsWithKey)} />
   }
 
   const getInput = (thresholdWithKey: ThresholdOptionsWithKey) => {
     const prefix = getColorPicker(thresholdWithKey)
 
     if (!isFinite(thresholdWithKey.value)) {
-      return (
-        <Input
-          css=""
-          disabled
-          prefix={prefix}
-          type="text"
-          value="Base"
-        >
-        </Input>
-      )
+      return <Input css="" disabled prefix={prefix} type="text" value="Base" />
     }
 
     const input = (
@@ -153,7 +131,6 @@ export const ThresholdsEditor: React.FC<Props> = ({
         <Input
           className={cx({ [styles.inputThreshold]: hasPriority })}
           css=""
-          onBlur={() => { }}
           onChange={(event) => onChangeThresholdValue(event, thresholdWithKey)}
           placeholder="value"
           prefix={prefix}
@@ -162,45 +139,40 @@ export const ThresholdsEditor: React.FC<Props> = ({
           type="number"
           value={thresholdWithKey.value}
         />
-        {hasPriority && <Input
-          className={styles.inputPriority}
-          css=""
-          onChange={({ target }: any) => onChangeThresholdPriority(target.value, thresholdWithKey)}
-          placeholder="Priority"
-          type="number"
-          value={thresholdWithKey.priority}
-        />
-        }
+        {hasPriority && (
+          <Input
+            className={styles.inputPriority}
+            css=""
+            onChange={({ target }: any) => onChangeThresholdPriority(target.value, thresholdWithKey)}
+            placeholder="Priority"
+            type="number"
+            value={thresholdWithKey.priority}
+          />
+        )}
       </div>
     )
     return input
   }
 
   useEffect(() => {
+    const onChangeThresholdsWithKey = () => {
+      onChange(thresholdsWithKey.map(({ key, ...threshold }) => ({ ...threshold })))
+    }
+
     onChangeThresholdsWithKey()
   }, [thresholdsWithKey])
 
   return (
     <div className={wrapperClass}>
-      <Button
-        className={styles.addButton}
-        fullWidth
-        icon="plus"
-        onClick={onAddThreshold}
-        variant="secondary"
-        size="sm"
-      >
+      <Button className={styles.addButton} fullWidth icon="plus" onClick={onAddThreshold} variant="secondary" size="sm">
         Add threshold
       </Button>
 
       {thresholdsWithKey
         .slice(0)
         .reverse()
-        .map(thresholdWithKey => (
-          <div
-            className={styles.item}
-            key={thresholdWithKey.key}
-          >
+        .map((thresholdWithKey) => (
+          <div className={styles.item} key={thresholdWithKey.key}>
             {getInput(thresholdWithKey)}
           </div>
         ))}
@@ -208,7 +180,7 @@ export const ThresholdsEditor: React.FC<Props> = ({
   )
 }
 
-const toThresholdsWithKey = (thresholds: Array<ThresholdOptions>) => {
+const toThresholdsWithKey = (thresholds: ThresholdOptions[]) => {
   if (!thresholds || thresholds.length === 0) {
     thresholds = [{ color: 'green', value: -Infinity }]
   } else {
@@ -217,7 +189,7 @@ const toThresholdsWithKey = (thresholds: Array<ThresholdOptions>) => {
 
   return thresholds.map((threshold, index) => ({
     ...threshold,
-    key: index
+    key: index,
   }))
 }
 
@@ -250,6 +222,6 @@ const getStyles = (theme: GrafanaTheme2) => {
     `,
     inputPriority: css`
       margin-left: ${theme.spacing(0.5)};
-    `
+    `,
   }
 }

@@ -77,7 +77,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
   icon: css`
     label: collapse__icon;
     margin-right: ${theme.spacing(1)};
-  `
+  `,
 })
 
 export interface Props {

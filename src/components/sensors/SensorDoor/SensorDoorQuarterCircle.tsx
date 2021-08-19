@@ -25,7 +25,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
   orientation,
   side,
   wallStrokeWidth = 0,
-  width = 0
+  width = 0,
 }) => {
   const styles = useStyles2(getStyles)
 
@@ -43,7 +43,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
   }
 
   const getTopHalfCirlcle = () => {
-    let moveToX = (2 * offsetX) + doorWidth
+    let moveToX = 2 * offsetX + doorWidth
     let moveToY = offsetY
     let x = width
     let y = height
@@ -58,7 +58,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
   }
 
   const getBottomHalfCirlcle = () => {
-    let moveToX = (2 * offsetY) + doorWidth + width
+    let moveToX = 2 * offsetY + doorWidth + width
     let moveToY = wallStrokeWidth
     let x = width * -1
     let y = height
@@ -74,7 +74,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
 
   const getLeftHalfCirlcle = () => {
     let moveToX = offsetY + height
-    let moveToY = (2 * offsetX) + doorWidth + width
+    let moveToY = 2 * offsetX + doorWidth + width
     let x = height * -1
     let y = width * -1
 
@@ -90,7 +90,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
 
   const getRightHalfCirlcle = () => {
     let moveToX = wallStrokeWidth + height
-    let moveToY = (2 * offsetX) + doorWidth
+    let moveToY = 2 * offsetX + doorWidth
     let x = height * -1
     let y = width
 
@@ -104,7 +104,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
   }
 
   const getStrokeDashArray = () => {
-    let strokeDashArray: number = -1
+    let strokeDashArray = -1
 
     if (orientation === Orientation.Bottom || orientation === Orientation.Left) {
       strokeDashArray = 1
@@ -117,14 +117,22 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
     return strokeDashArray
   }
 
-  const getQuarterCircleView = (moveToX: number, moveToY: number, radiiX: number, radiiY: number, x: number, y: number) => {
+  const getQuarterCircleView = (
+    moveToX: number,
+    moveToY: number,
+    radiiX: number,
+    radiiY: number,
+    x: number,
+    y: number
+  ) => {
     const strokeDashArray = getStrokeDashArray()
 
     return (
       <path
-        className={cx(styles.doorQuarterCircle,
+        className={cx(
+          styles.doorQuarterCircle,
           { [styles.doorOpenQuarterCircle]: isOpen },
-          { [styles.doorClosedQuarterCircle(strokeDashArray)]: !isOpen },
+          { [styles.doorClosedQuarterCircle(strokeDashArray)]: !isOpen }
         )}
         d={`M${moveToX}, ${moveToY} a${radiiX}, ${radiiY} 0 0, 1 ${x}, ${y}`}
         fill="none"
@@ -133,9 +141,7 @@ export const SensorDoorQuarterCircle: React.FC<Props> = ({
     )
   }
 
-  return (
-    getQuarterCircle()
-  )
+  return getQuarterCircle()
 }
 
 const getStyles = (theme: GrafanaTheme2) => {
@@ -149,6 +155,6 @@ const getStyles = (theme: GrafanaTheme2) => {
     `,
     doorClosedQuarterCircle: (strokeDashArray: number) => css`
       stroke-dashoffset: ${strokeDashArray};
-    `
+    `,
   }
 }

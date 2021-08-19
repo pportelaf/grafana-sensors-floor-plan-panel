@@ -10,16 +10,16 @@ export interface SensorData {
 }
 
 export class SensorDataFramesConverter {
-  private dataFramesWithSettings: Array<DataFrameWithSettings>
+  private dataFramesWithSettings: DataFrameWithSettings[]
 
-  constructor(dataFramesWithSettings: Array<DataFrameWithSettings>) {
+  constructor(dataFramesWithSettings: DataFrameWithSettings[]) {
     this.dataFramesWithSettings = dataFramesWithSettings
   }
 
-  public getLastDataList(): Array<SensorData> {
-    let values: Array<SensorData> = []
+  getLastDataList(): SensorData[] {
+    let values: SensorData[] = []
 
-    this.dataFramesWithSettings.forEach(dataFrameWithSettings => {
+    this.dataFramesWithSettings.forEach((dataFrameWithSettings) => {
       const sensorData = this.getLastDataFromDataFrame(dataFrameWithSettings)
 
       if (sensorData) {
@@ -31,7 +31,7 @@ export class SensorDataFramesConverter {
   }
 
   private getLastDataFromDataFrame(dataFrameWithSettings: DataFrameWithSettings): SensorData | undefined {
-    const field = dataFrameWithSettings.dataFrame.fields.find(field => field.type !== 'time')
+    const field = dataFrameWithSettings.dataFrame.fields.find((field) => field.type !== 'time')
     let value
     let formattedValue
     let threshold
@@ -47,7 +47,7 @@ export class SensorDataFramesConverter {
     return {
       value,
       formattedValue,
-      threshold
+      threshold,
     }
   }
 
@@ -61,7 +61,7 @@ export class SensorDataFramesConverter {
     valueFormatted = {
       prefix: '',
       suffix: '',
-      ...valueFormatter(value, dataFrameSettings.decimals)
+      ...valueFormatter(value, dataFrameSettings.decimals),
     }
 
     return `${label}${valueFormatted.prefix}${valueFormatted.text}${valueFormatted.suffix}`

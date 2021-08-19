@@ -4,18 +4,18 @@ export enum Orientation {
   Top = 'top',
   Bottom = 'bottom',
   Left = 'left',
-  Right = 'right'
+  Right = 'right',
 }
 
 export enum Side {
   Start = 'start',
-  End = 'end'
+  End = 'end',
 }
 
 export enum SensorType {
   AirQuality = 'air-quality',
   Door = 'door',
-  WaterLevel = 'water-level'
+  WaterLevel = 'water-level',
 }
 
 export interface VectorGraphicOptions {
@@ -29,10 +29,9 @@ export interface VectorGraphicOptions {
   fill?: string
 }
 
-
 export interface SensorOptions extends VectorGraphicOptions {
   color?: string
-  dataFramesOptionsList?: Array<DataFrameOptions>
+  dataFramesOptionsList?: DataFrameOptions[]
   fontSize?: number
   link?: string
   name: string

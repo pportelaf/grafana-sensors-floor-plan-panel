@@ -1,5 +1,4 @@
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
-import { useTheme2 } from '@grafana/ui'
 import { GrafanaTheme2 } from '@grafana/data'
 import { Orientation, SensorOptions, SensorType, Side } from 'editor/SensorEditor/SensorOptions'
 
@@ -10,26 +9,22 @@ export class DefaultOptionsService {
   private borderColor: string
   private fontSize: number
 
-  private constructor() {
-    this.theme = useTheme2()
-    this.setColors()
+  private constructor(theme: GrafanaTheme2) {
+    this.theme = theme
+    this.backgroundColor = this.theme.colors.background.primary
+    this.borderColor = this.theme.colors.text.primary
     this.fontSize = 16
   }
 
-  public static getInstance(): DefaultOptionsService {
+  static getInstance(theme: GrafanaTheme2): DefaultOptionsService {
     if (!DefaultOptionsService.instance) {
-      DefaultOptionsService.instance = new DefaultOptionsService()
+      DefaultOptionsService.instance = new DefaultOptionsService(theme)
     }
 
     return DefaultOptionsService.instance
   }
 
-  private setColors() {
-    this.backgroundColor = this.theme.colors.background.primary
-    this.borderColor = this.theme.colors.text.primary
-  }
-
-  public getFloorPlanDefaultOptions(): FloorPlanOptions {
+  getFloorPlanDefaultOptions(): FloorPlanOptions {
     return {
       name: 'New floor plan',
       fill: this.backgroundColor,
@@ -38,11 +33,11 @@ export class DefaultOptionsService {
       stroke: this.borderColor,
       strokeWidth: 10,
       x: 100,
-      y: 100
+      y: 100,
     }
   }
 
-  public getSensorDefaultOptions(sensorType?: SensorType): SensorOptions {
+  getSensorDefaultOptions(sensorType?: SensorType): SensorOptions {
     let width: number | undefined
     let height: number | undefined
     let radius: number | undefined
@@ -70,22 +65,13 @@ export class DefaultOptionsService {
         break
     }
 
-    return {
-      name: 'New sensor',
-      type: sensorType,
-      width,
-      height,
-      orientation,
-      side,
-      radius,
-      fontSize
-    }
+    return { name: 'New sensor', type: sensorType, width, height, orientation, side, radius, fontSize }
   }
 
-  public getLabelDefaultOptions() {
+  getLabelDefaultOptions() {
     return {
       color: this.borderColor,
-      fontSize: this.fontSize
+      fontSize: this.fontSize,
     }
   }
 }

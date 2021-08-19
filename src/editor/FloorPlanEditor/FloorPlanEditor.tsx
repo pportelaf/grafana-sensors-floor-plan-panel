@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
-import { useStyles2, Button, InlineField, InlineSwitch } from '@grafana/ui'
+import { useStyles2, useTheme2, Button, InlineField, InlineSwitch } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from './FloorPlanOptions'
@@ -18,12 +18,9 @@ interface Props {
   value: FloorPlanOptions
 }
 
-export const FloorPlanEditor: React.FC<Props> = ({
-  context,
-  onChange,
-  value = {}
-}) => {
+export const FloorPlanEditor: React.FC<Props> = ({ context, onChange, value = {} }) => {
   const styles = useStyles2(getStyles)
+  const theme = useTheme2()
 
   const [sensorEditorCollapseStates, setSensorEditorCollapseStates] = useState<boolean[]>([])
 
@@ -32,13 +29,16 @@ export const FloorPlanEditor: React.FC<Props> = ({
     sensorOptionsList: [],
     ...value,
   }
-  let sensorOptionsList: Array<SensorOptions> = floorPlanOptions.sensorOptionsList || []
+  let sensorOptionsList: SensorOptions[] = floorPlanOptions.sensorOptionsList || []
 
   const fill = floorPlanOptions.fill || ''
   const stroke = floorPlanOptions.stroke || ''
 
-  const defaultOptionsService: DefaultOptionsService = DefaultOptionsService.getInstance()
-  const inlineFieldInputGenerator: InlineFieldInputGenerator<FloorPlanOptions> = new InlineFieldInputGenerator(floorPlanOptions, onChange)
+  const defaultOptionsService: DefaultOptionsService = DefaultOptionsService.getInstance(theme)
+  const inlineFieldInputGenerator: InlineFieldInputGenerator<FloorPlanOptions> = new InlineFieldInputGenerator(
+    floorPlanOptions,
+    onChange
+  )
 
   const isSensorEditorCollapseOpen = (index: number) => {
     return sensorEditorCollapseStates[index]
@@ -66,9 +66,9 @@ export const FloorPlanEditor: React.FC<Props> = ({
 
   const onChangeDisplayName = (event: any) => {
     if (event.currentTarget?.checked) {
-      floorPlanOptions.labelOptions = {...
-        defaultOptionsService.getLabelDefaultOptions(),
-        y: floorPlanOptions.y
+      floorPlanOptions.labelOptions = {
+        ...defaultOptionsService.getLabelDefaultOptions(),
+        y: floorPlanOptions.y,
       }
     } else {
       floorPlanOptions.labelOptions = undefined
@@ -77,7 +77,7 @@ export const FloorPlanEditor: React.FC<Props> = ({
     onChange(floorPlanOptions)
   }
 
-  const onChangeLabelOptions = (labelOptions: LabelOptions) => {
+  const onChangeLabelOptions = (labelOptions?: LabelOptions) => {
     floorPlanOptions.labelOptions = labelOptions
 
     onChange(floorPlanOptions)
@@ -87,7 +87,7 @@ export const FloorPlanEditor: React.FC<Props> = ({
     let sensorOptions: SensorOptions = {
       x: floorPlanOptions.x,
       y: floorPlanOptions.y,
-      ...defaultOptionsService.getSensorDefaultOptions()
+      ...defaultOptionsService.getSensorDefaultOptions(),
     }
 
     sensorOptionsList.push(sensorOptions)
@@ -139,18 +139,14 @@ export const FloorPlanEditor: React.FC<Props> = ({
   const getLabelEditor = () => {
     const labelOptions = floorPlanOptions.labelOptions || defaultOptionsService.getLabelDefaultOptions()
 
-    return (
-      <LabelEditor
-        value={labelOptions}
-        onChange={onChangeLabelOptions}
-      />
-    )
+    return <LabelEditor value={labelOptions} onChange={onChangeLabelOptions} />
   }
 
   const getSensorEditorListComonent = () => {
     return sensorOptionsList.map((sensorOptions, index) => {
       return (
         <CollapseEditor
+          key={index}
           collapsible
           isOpen={isSensorEditorCollapseOpen(index)}
           label={sensorOptions.name}
@@ -162,11 +158,7 @@ export const FloorPlanEditor: React.FC<Props> = ({
           showMoveUp
           showRemove
         >
-          <SensorEditor
-            context={context}
-            onChange={(value) => onChangeSensor(value, index)}
-            value={sensorOptions}
-          />
+          <SensorEditor context={context} onChange={(value) => onChangeSensor(value, index)} value={sensorOptions} />
         </CollapseEditor>
       )
     })
@@ -175,14 +167,8 @@ export const FloorPlanEditor: React.FC<Props> = ({
   return (
     <div className={styles.wrapper}>
       {inlineFieldInputGenerator.getInlineFieldInput('Name', 'text', 'name')}
-      <InlineField
-        label="Display name"
-      >
-        <InlineSwitch
-          css=""
-          value={!!value.labelOptions}
-          onChange={onChangeDisplayName}
-        />
+      <InlineField label="Display name">
+        <InlineSwitch css="" value={!!value.labelOptions} onChange={onChangeDisplayName} />
       </InlineField>
       {value.labelOptions && getLabelEditor()}
 
@@ -191,33 +177,15 @@ export const FloorPlanEditor: React.FC<Props> = ({
       {inlineFieldInputGenerator.getInlineFieldInput('Width', 'number', 'width')}
       {inlineFieldInputGenerator.getInlineFieldInput('Height', 'number', 'height')}
       {inlineFieldInputGenerator.getInlineFieldInput('Wall width', 'number', 'strokeWidth')}
-      <InlineField
-        className={styles.inlineFieldColorPicker}
-        label="Wall color"
-      >
-        <CustomColorPicker
-          color={stroke}
-          onChange={onChangeStroke}
-        />
+      <InlineField className={styles.inlineFieldColorPicker} label="Wall color">
+        <CustomColorPicker color={stroke} onChange={onChangeStroke} />
       </InlineField>
-      <InlineField
-        className={styles.inlineFieldColorPicker}
-        label="Background color"
-      >
-        <CustomColorPicker
-          color={fill}
-          onChange={onChangeFill}
-        />
+      <InlineField className={styles.inlineFieldColorPicker} label="Background color">
+        <CustomColorPicker color={fill} onChange={onChangeFill} />
       </InlineField>
 
       <h5 className={styles.sensorsTitle}>Sensors</h5>
-      <Button
-        className={styles.buttonAddSensor}
-        icon="plus"
-        onClick={addSensor}
-        size="sm"
-        variant="secondary"
-      >
+      <Button className={styles.buttonAddSensor} icon="plus" onClick={addSensor} size="sm" variant="secondary">
         Add sensor
       </Button>
 
@@ -241,6 +209,6 @@ const getStyles = (theme: GrafanaTheme2) => {
       margin-bottom: ${theme.spacing(1)};
       width: 100%;
       justify-content: center;
-    `
+    `,
   }
 }

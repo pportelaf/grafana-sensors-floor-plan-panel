@@ -8,16 +8,16 @@ interface Props {
   value?: CanvasOptions
 }
 
-export const CanvasEditor: React.FC<Props> = ({
-  onChange,
-  value
-}) => {
+export const CanvasEditor: React.FC<Props> = ({ onChange, value }) => {
   const canvasOptions: CanvasOptions = value || {
     height: 1000,
     width: 1000,
-    zoom: 100
+    zoom: 100,
   }
-  const inlineFieldInputGenerator: InlineFieldInputGenerator<CanvasOptions> = new InlineFieldInputGenerator(canvasOptions, onChange)
+  const inlineFieldInputGenerator: InlineFieldInputGenerator<CanvasOptions> = new InlineFieldInputGenerator(
+    canvasOptions,
+    onChange
+  )
 
   const onChangeZoom = (value: any) => {
     canvasOptions.zoom = value

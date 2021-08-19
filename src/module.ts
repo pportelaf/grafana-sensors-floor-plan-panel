@@ -4,23 +4,23 @@ import { FloorPlanListEditor } from './editor/FloorPlanListEditor/FloorPlanListE
 import { PanelOptions } from './panel/PanelOptions'
 import { CanvasEditor } from './editor/CanvasEditor/CanvasEditor'
 
-export const plugin = new PanelPlugin<PanelOptions>(Panel).setPanelOptions(builder => {
+export const plugin = new PanelPlugin<PanelOptions>(Panel).setPanelOptions((builder) => {
   return builder
     .addBooleanSwitch({
       path: 'debugMode',
       name: 'Debug mode',
-      defaultValue: false
+      defaultValue: false,
     })
     .addCustomEditor({
       id: 'canvasOptions',
       path: 'canvasOptions',
       name: 'Canvas settings',
-      editor: CanvasEditor
+      editor: CanvasEditor,
     })
     .addCustomEditor({
       id: 'floorPlanOptionsList',
       path: 'floorPlanOptionsList',
       name: 'Floor plans',
-      editor: FloorPlanListEditor
+      editor: FloorPlanListEditor,
     })
 })

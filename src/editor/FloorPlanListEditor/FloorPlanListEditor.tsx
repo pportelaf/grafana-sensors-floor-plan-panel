@@ -1,26 +1,22 @@
 import React, { useState } from 'react'
 import { GrafanaTheme2, StandardEditorProps } from '@grafana/data'
-import { Button, useStyles2 } from '@grafana/ui'
+import { Button, useStyles2, useTheme2 } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
 import { CollapseEditor } from 'components/CollapseEditor/CollapseEditor'
 import { FloorPlanEditor } from 'editor/FloorPlanEditor/FloorPlanEditor'
 
-interface Props extends StandardEditorProps<Array<FloorPlanOptions>> { }
+interface Props extends StandardEditorProps<FloorPlanOptions[]> {}
 
-export const FloorPlanListEditor: React.FC<Props> = ({
-  context,
-  item,
-  onChange,
-  value
-}) => {
+export const FloorPlanListEditor: React.FC<Props> = ({ context, item, onChange, value }) => {
   const styles = useStyles2(getStyles)
+  const theme = useTheme2()
   const [collapseStateArray, setCollapseStateArray] = useState<boolean[]>([])
 
-  let floorPlanOptions: Array<FloorPlanOptions> = value || []
+  let floorPlanOptions: FloorPlanOptions[] = value || []
 
-  const defaultOptionsService: DefaultOptionsService = DefaultOptionsService.getInstance()
+  const defaultOptionsService: DefaultOptionsService = DefaultOptionsService.getInstance(theme)
 
   const onChangeEditor = (index: number, value: FloorPlanOptions | undefined) => {
     if (value) {
@@ -82,31 +78,32 @@ export const FloorPlanListEditor: React.FC<Props> = ({
 
   return (
     <React.Fragment>
-      <Button className={styles.buttonAdd} icon="plus" onClick={addFloorPlan} size="sm" variant="secondary">Add floor plan</Button>
-      {
-        floorPlanOptions.map((floorPlanOptions, index) => {
-          return (
-            <CollapseEditor
-              collapsible
-              isOpen={isCollapseOpen(index)}
-              label={floorPlanOptions.name}
-              onCopy={() => onCopy(index)}
-              onMoveUp={() => onMoveUp(index)}
-              onRemove={() => onRemove(index)}
-              onToggle={() => toggleCollapseState(index)}
-              showCopy
-              showMoveUp
-              showRemove
-            >
-              <FloorPlanEditor
-                context={context}
-                onChange={value => onChangeEditor(index, value)}
-                value={floorPlanOptions}
-              />
-            </CollapseEditor>
-          )
-        })
-      }
+      <Button className={styles.buttonAdd} icon="plus" onClick={addFloorPlan} size="sm" variant="secondary">
+        Add floor plan
+      </Button>
+      {floorPlanOptions.map((floorPlanOptions, index) => {
+        return (
+          <CollapseEditor
+            key={index}
+            collapsible
+            isOpen={isCollapseOpen(index)}
+            label={floorPlanOptions.name}
+            onCopy={() => onCopy(index)}
+            onMoveUp={() => onMoveUp(index)}
+            onRemove={() => onRemove(index)}
+            onToggle={() => toggleCollapseState(index)}
+            showCopy
+            showMoveUp
+            showRemove
+          >
+            <FloorPlanEditor
+              context={context}
+              onChange={(value) => onChangeEditor(index, value)}
+              value={floorPlanOptions}
+            />
+          </CollapseEditor>
+        )
+      })}
     </React.Fragment>
   )
 }
@@ -117,6 +114,6 @@ const getStyles = (theme: GrafanaTheme2) => {
       margin-bottom: ${theme.spacing(1)};
       width: 100%;
       justify-content: center;
-    `
+    `,
   }
 }

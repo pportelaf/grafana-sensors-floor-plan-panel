@@ -9,21 +9,12 @@ interface Props {
   onChange: any
 }
 
-
-export const CustomColorPicker: React.FC<Props> = ({
-  color,
-  enableNamedColors,
-  onChange
-}) => {
+export const CustomColorPicker: React.FC<Props> = ({ color, enableNamedColors, onChange }) => {
   const styles = useStyles2(getStyles)
 
   return (
     <div className={styles.colorPickerWrapper}>
-      <ColorPicker
-        color={color}
-        enableNamedColors={enableNamedColors}
-        onChange={onChange}
-      />
+      <ColorPicker color={color} enableNamedColors={enableNamedColors} onChange={onChange} />
     </div>
   )
 }

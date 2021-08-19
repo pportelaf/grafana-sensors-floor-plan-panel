@@ -11,26 +11,14 @@ import { SensorDoorView } from './SensorDoorView'
 import { SensorDoorWallOverlay } from './SensorDoorWallOverlay'
 
 interface Props {
-  dataFramesWithSettings: Array<DataFrameWithSettings>
+  dataFramesWithSettings: DataFrameWithSettings[]
   fill: string | undefined
   floorPlanOptions: FloorPlanOptions
   sensorOptions: SensorOptions
 }
 
-export const SensorDoor: React.FC<Props> = ({
-  dataFramesWithSettings,
-  fill,
-  floorPlanOptions,
-  sensorOptions,
-}) => {
-  const {
-    height = 0,
-    orientation = Orientation.Top,
-    side = Side.Start,
-    x = 0,
-    y = 0,
-    width = 0
-  } = sensorOptions
+export const SensorDoor: React.FC<Props> = ({ dataFramesWithSettings, fill, floorPlanOptions, sensorOptions }) => {
+  const { height = 0, orientation = Orientation.Top, side = Side.Start, x = 0, y = 0, width = 0 } = sensorOptions
   const styles = useStyles2(getStyles)
   const theme: GrafanaTheme2 = useTheme2()
   const { strokeWidth: wallStrokeWidth = 0, stroke: wallStroke, fill: wallFill } = floorPlanOptions
@@ -44,9 +32,9 @@ export const SensorDoor: React.FC<Props> = ({
 
   let activeThreshold: Threshold = {
     color: theme.colors.text.disabled,
-    value: 0
+    value: 0,
   }
-  let isDoorOpen: boolean = true
+  let isDoorOpen = true
   let lastData: SensorData | undefined
 
   const setLastData = () => {
@@ -72,26 +60,12 @@ export const SensorDoor: React.FC<Props> = ({
   setActiveThreshold()
 
   const getLinkHoverArea = () => {
-    return (
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        fill="transparent"
-        stroke="none"
-      />
-    )
+    return <rect x={x} y={y} width={width} height={height} fill="transparent" stroke="none" />
   }
 
   const getContent = () => {
     return (
-      <g
-        fill={fill}
-        stroke={wallStroke}
-        stroke-width={strokeWidth}
-        transform={`translate(${x}, ${y})`}
-      >
+      <g fill={fill} stroke={wallStroke} strokeWidth={strokeWidth} transform={`translate(${x}, ${y})`}>
         <SensorDoorWallOverlay
           doorWidth={doorWidth}
           fill={wallFill}
@@ -102,13 +76,8 @@ export const SensorDoor: React.FC<Props> = ({
           strokeWidth={wallOverlayStrokeWidth}
           wallStrokeWidth={wallStrokeWidth}
           width={width}
-
         />
-        <g
-          className={cx(
-            styles.groupDoor(activeThreshold.color)
-          )}
-        >
+        <g className={cx(styles.groupDoor(activeThreshold.color))}>
           <SensorDoorView
             doorWidth={doorWidth}
             height={height}
@@ -138,16 +107,12 @@ export const SensorDoor: React.FC<Props> = ({
 
   const getRender = () => {
     const content = getContent()
-  
+
     if (sensorOptions.link) {
       return (
-        <a
-          className={styles.link}
-          href={sensorOptions.link}
-          target="_blank"
-        >
-          { getLinkHoverArea() }
-          { content }
+        <a className={styles.link} href={sensorOptions.link} target="_blank" rel="noreferrer">
+          {getLinkHoverArea()}
+          {content}
         </a>
       )
     }

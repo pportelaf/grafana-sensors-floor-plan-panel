@@ -12,7 +12,7 @@ export class InlineFieldInputGenerator<T> {
     this.onChange = onChange
   }
 
-  public getInlineFieldInput(label: string, type: string, valuePath: string) {
+  getInlineFieldInput(label: string, type: string, valuePath: string) {
     return (
       <InlineFieldInput
         label={label}
@@ -33,6 +33,10 @@ export class InlineFieldInputGenerator<T> {
   }
 
   private getNumberFromTargetValue(value: any) {
-    return (value === undefined || value === '') ? undefined : Number(value)
+    if (value === undefined || value === '') {
+      return undefined
+    }
+
+    return Number(value)
   }
 }

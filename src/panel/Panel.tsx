@@ -5,24 +5,14 @@ import { css, cx } from 'emotion'
 import { PanelOptions } from 'panel/PanelOptions'
 import { FloorPlanList } from '../components/FloorPlanList/FloorPlanList'
 
-interface Props extends PanelProps<PanelOptions> { }
+interface Props extends PanelProps<PanelOptions> {}
 
-export const Panel: React.FC<Props> = ({
-  data,
-  height,
-  options,
-  width
-}) => {
+export const Panel: React.FC<Props> = ({ data, height, options, width }) => {
   const styles = useStyles2(getStyles)
   const floorPlanOptionsList = options.floorPlanOptionsList || []
 
   return (
-    <div
-      className={cx(
-        styles.wrapper(width, height),
-        { [styles.wrapperOverflow]: options.debugMode }
-      )}
-    >
+    <div className={cx(styles.wrapper(width, height), { [styles.wrapperOverflow]: options.debugMode })}>
       <FloorPlanList
         dataFrames={data.series}
         debugMode={options.debugMode}
@@ -43,5 +33,5 @@ const getStyles = (theme: GrafanaTheme2) => ({
   `,
   wrapperOverflow: css`
     overflow: auto;
-  `
+  `,
 })

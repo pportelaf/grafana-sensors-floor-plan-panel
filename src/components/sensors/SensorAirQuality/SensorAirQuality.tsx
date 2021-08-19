@@ -8,7 +8,7 @@ import { FloorPlanOptions } from '../../../editor/FloorPlanEditor/FloorPlanOptio
 import { Orientation, SensorOptions } from '../../../editor/SensorEditor/SensorOptions'
 
 interface Props {
-  dataFramesWithSettings: Array<DataFrameWithSettings>
+  dataFramesWithSettings: DataFrameWithSettings[]
   fill: string | undefined
   floorPlanOptions: FloorPlanOptions
   sensorOptions: SensorOptions
@@ -21,8 +21,8 @@ export const SensorAirQuality: React.FC<Props> = ({
   sensorOptions,
 }) => {
   const lineHeight = 1.2
-  const pulseScale: number = 2.3
-  const pulseSpeed: string = '3s'
+  const pulseScale = 2.3
+  const pulseSpeed = '3s'
 
   const styles = useStyles2(getStyles)
   const { radius = 0, fontSize = 14, x = 0, y = 0 } = sensorOptions
@@ -31,15 +31,18 @@ export const SensorAirQuality: React.FC<Props> = ({
   const pulseRadius: number = radius * pulseScale
   const pulseDiameter: number = pulseRadius * 2
 
-  const isVerticallyCentered: boolean = sensorOptions.orientation === Orientation.Left || sensorOptions.orientation === Orientation.Right
-  const isHorizontallyCentered: boolean = sensorOptions.orientation === Orientation.Top || sensorOptions.orientation === Orientation.Bottom
+  const isVerticallyCentered: boolean =
+    sensorOptions.orientation === Orientation.Left || sensorOptions.orientation === Orientation.Right
+
+  const isHorizontallyCentered: boolean =
+    sensorOptions.orientation === Orientation.Top || sensorOptions.orientation === Orientation.Bottom
 
   const sensorDataFramesConverter: SensorDataFramesConverter = new SensorDataFramesConverter(dataFramesWithSettings)
-  let lastDataList: Array<SensorData> = []
-  let hasData: boolean = false
+  let lastDataList: SensorData[] = []
+  let hasData = false
   let activeThreshold: Threshold = {
     color: theme.colors.text.disabled,
-    value: 0
+    value: 0,
   }
 
   const setLastDataList = () => {
@@ -51,7 +54,7 @@ export const SensorAirQuality: React.FC<Props> = ({
     let priority
     let higherPriority = -Infinity
 
-    lastDataList.forEach(lastData => {
+    lastDataList.forEach((lastData) => {
       priority = lastData.threshold.priority || 0
       if (priority > higherPriority) {
         higherPriority = priority
@@ -66,44 +69,29 @@ export const SensorAirQuality: React.FC<Props> = ({
 
   const getCircles = () => {
     return (
-      <g
-        className={styles.circleWrapperWithLink}
-      >
+      <g className={styles.circleWrapperWithLink}>
+        <circle className={cx(styles.circle(activeThreshold.color))} cx="0" cy="0" r={radius} />
+
         <circle
-          className={
-            cx(styles.circle(activeThreshold.color),
-            )}
-          cx="0"
-          cy="0"
-          r={radius}
-        />
-  
-        <circle
-          className={
-            cx(styles.disk1(activeThreshold.color, radius, pulseScale, pulseSpeed),
-              {
-                [styles.diskNoData]: !hasData
-              }
-            )}
+          className={cx(styles.disk1(activeThreshold.color, radius, pulseScale, pulseSpeed), {
+            [styles.diskNoData]: !hasData,
+          })}
           cx="0"
           cy="0"
           fill="none"
           r={pulseRadius}
-          stroke-width="2"
+          strokeWidth="2"
         />
-  
+
         <circle
-          className={
-            cx(styles.disk2(activeThreshold.color, radius, pulseScale, pulseSpeed),
-              {
-                [styles.diskNoData]: !hasData
-              }
-            )}
+          className={cx(styles.disk2(activeThreshold.color, radius, pulseScale, pulseSpeed), {
+            [styles.diskNoData]: !hasData,
+          })}
           cx="0"
           cy="0"
           fill="none"
           r={pulseRadius}
-          stroke-width="2"
+          strokeWidth="2"
         />
       </g>
     )
@@ -113,35 +101,26 @@ export const SensorAirQuality: React.FC<Props> = ({
     let textY = 0
     let textX = 0
 
-    const textClassName = cx(
-      styles.text,
-      {
-        [styles.textCenterHorizontal]: isHorizontallyCentered,
-        [styles.textCenterVertical(pulseRadius)]: isVerticallyCentered,
-        [styles.textLeft(pulseRadius)]: sensorOptions.orientation === Orientation.Left,
-        [styles.textTop(textLines, pulseRadius)]: sensorOptions.orientation === Orientation.Top
-      })
+    const textClassName = cx(styles.text, {
+      [styles.textCenterHorizontal]: isHorizontallyCentered,
+      [styles.textCenterVertical(pulseRadius)]: isVerticallyCentered,
+      [styles.textLeft(pulseRadius)]: sensorOptions.orientation === Orientation.Left,
+      [styles.textTop(textLines, pulseRadius)]: sensorOptions.orientation === Orientation.Top,
+    })
 
     if (sensorOptions.orientation === Orientation.Bottom) {
       textY = pulseDiameter
     } else if (sensorOptions.orientation === Orientation.Right) {
-      textX = pulseRadius + (pulseRadius / 2)
+      textX = pulseRadius + pulseRadius / 2
     }
 
     return (
-      <text
-        y={textY}
-        className={textClassName}
-      >
+      <text y={textY} className={textClassName}>
         {lastDataList.map((lastData, index) => {
           let dy = index > 0 ? `${lineHeight}em` : 0
 
           return (
-            <tspan
-              fill={lastData.threshold.color}
-              x={textX}
-              dy={dy}
-            >
+            <tspan key={index} fill={lastData.threshold.color} x={textX} dy={dy}>
               {lastData.formattedValue}
             </tspan>
           )
@@ -155,8 +134,8 @@ export const SensorAirQuality: React.FC<Props> = ({
 
     return (
       <rect
-        x={x -(areaWidth / 2)}
-        y={y -(areaWidth / 2)}
+        x={x - areaWidth / 2}
+        y={y - areaWidth / 2}
         width={areaWidth}
         height={areaWidth}
         fill="transparent"
@@ -167,15 +146,10 @@ export const SensorAirQuality: React.FC<Props> = ({
 
   const getContent = () => {
     return (
-      <g
-        className={styles.wrapper(fontSize)}
-        fill={fill}
-        stroke="none"
-        transform={`translate(${x}, ${y})`}
-      >
-        { getCircles() }
-  
-        { getDataValuesText() }
+      <g className={styles.wrapper(fontSize)} fill={fill} stroke="none" transform={`translate(${x}, ${y})`}>
+        {getCircles()}
+
+        {getDataValuesText()}
       </g>
     )
   }
@@ -185,13 +159,9 @@ export const SensorAirQuality: React.FC<Props> = ({
 
     if (sensorOptions.link) {
       return (
-        <a
-          className={styles.link}
-          href={sensorOptions.link}
-          target="_blank"
-        >
-          { getLinkHoverArea() }
-          { content }
+        <a className={styles.link} href={sensorOptions.link} target="_blank" rel="noreferrer">
+          {getLinkHoverArea()}
+          {content}
         </a>
       )
     }
@@ -201,7 +171,6 @@ export const SensorAirQuality: React.FC<Props> = ({
 
   return getRender()
 }
-
 
 const disk1Animation = (radius: number, pulseScale: number) => keyframes`
   0% {
@@ -264,12 +233,12 @@ const getStyles = (theme: GrafanaTheme2) => {
     disk1: (color: string, radius: number, pulseScale: number, pulseSpeed: string) => css`
       r: ${radius};
       stroke: ${color};
-      animation: ${disk1Animation(radius, pulseScale)} ${pulseSpeed} cubic-bezier(.39,.54,.41,1.5) infinite;
+      animation: ${disk1Animation(radius, pulseScale)} ${pulseSpeed} cubic-bezier(0.39, 0.54, 0.41, 1.5) infinite;
     `,
     disk2: (color: string, radius: number, pulseScale: number, pulseSpeed: string) => css`
       r: ${radius * pulseScale};
       stroke: ${color};
-      animation: ${disk2Animation(radius, pulseScale)} ${pulseSpeed} cubic-bezier(.39,.54,.41,1.5) infinite;
+      animation: ${disk2Animation(radius, pulseScale)} ${pulseSpeed} cubic-bezier(0.39, 0.54, 0.41, 1.5) infinite;
     `,
     diskNoData: css`
       animation: none;
@@ -278,16 +247,16 @@ const getStyles = (theme: GrafanaTheme2) => {
       transform-box: fill-box;
     `,
     textTop: (textLines: number, circleRadius: number) => css`
-      transform: translate(-50%, calc(-${textLines}em - ${circleRadius + (circleRadius / 2)}px));
+      transform: translate(-50%, calc(-${textLines}em - ${circleRadius + circleRadius / 2}px));
     `,
     textLeft: (circleRadius: number) => css`
-      transform: translate(calc(-100% - ${circleRadius + (circleRadius / 2)}px), calc(-50% + ${circleRadius}px));
+      transform: translate(calc(-100% - ${circleRadius + circleRadius / 2}px), calc(-50% + ${circleRadius}px));
     `,
     textCenterHorizontal: css`
       transform: translate(-50%, 0);
     `,
     textCenterVertical: (circleRadius: number) => css`
       transform: translate(0, calc(-50% + ${circleRadius}px));
-    `
+    `,
   }
 }

@@ -9,62 +9,43 @@ import { FloorPlan } from '../FloorPlan/FloorPlan'
 interface Props extends CanvasOptions {
   dataFrames: DataFrame[]
   debugMode: boolean
-  value: Array<FloorPlanOptions>
+  value: FloorPlanOptions[]
 }
 
-export const FloorPlanList: React.FC<Props> = ({
-  dataFrames,
-  debugMode,
-  height = 0,
-  value,
-  width = 0,
-  zoom = 0
-}) => {
+export const FloorPlanList: React.FC<Props> = ({ dataFrames, debugMode, height = 0, value, width = 0, zoom = 0 }) => {
   const theme = useTheme2()
   const styles = useStyles2(getStyles)
-  const floorPlanOptions: Array<FloorPlanOptions> = value || []
+  const floorPlanOptions: FloorPlanOptions[] = value || []
   let svgDimensions = {}
 
   if (debugMode) {
     svgDimensions = {
-      width: width * zoom / 100,
-      height: height * zoom / 100
+      width: (width * zoom) / 100,
+      height: (height * zoom) / 100,
     }
   }
 
   const getFloorPlans = () => {
     return (
       <React.Fragment>
-        {floorPlanOptions.map(floorPlanOptions => (
-          <FloorPlan
-            value={floorPlanOptions}
-            dataFrames={dataFrames}
-          />
+        {floorPlanOptions.map((floorPlanOptions, index) => (
+          <FloorPlan key={index} value={floorPlanOptions} dataFrames={dataFrames} />
         ))}
       </React.Fragment>
     )
   }
 
   const getDebugRect = () => {
-    const rect =
-      <rect
-        x="0"
-        y="0"
-        width={width}
-        height={height}
-        fill="none"
-        stroke={theme.colors.text.primary}
-        stroke-width="1"
-      />
+    const rect = (
+      <rect x="0" y="0" width={width} height={height} fill="none" stroke={theme.colors.text.primary} strokeWidth="1" />
+    )
 
     return debugMode ? rect : undefined
   }
 
   return (
     <svg
-      className={cx(styles.svg,
-        { [styles.svgResponsive]: !debugMode },
-      )}
+      className={cx(styles.svg, { [styles.svgResponsive]: !debugMode })}
       viewBox={`0 0 ${width} ${height}`}
       {...svgDimensions}
     >
@@ -90,5 +71,5 @@ const getStyles = (theme: GrafanaTheme2) => ({
   farmPlan: css`
     width: 100%;
     height: 100%;
-  `
+  `,
 })

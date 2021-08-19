@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
-import { RadioButtonGroup, InlineField, useStyles2, Button } from '@grafana/ui'
+import { RadioButtonGroup, InlineField, useStyles2, useTheme2, Button } from '@grafana/ui'
 import { css } from 'emotion'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { DataFrameOptions } from 'editor/DataFrameEditor/DataFrameOptions'
@@ -15,67 +15,79 @@ interface Props {
   value: SensorOptions
 }
 
+interface SelectSensorTypeOptions {
+  label: string
+  value: SensorType
+}
+
+interface SelectOrientationOptions {
+  label: string
+  value: Orientation
+}
+
+interface SelectSideOptions {
+  label: string
+  value: Side
+}
+
 const sensorTypesWithOneDataFrame = [SensorType.WaterLevel, SensorType.Door]
-const inputVisibilityMap: { [key: string]: Array<SensorType> } = {
+const inputVisibilityMap: { [key: string]: SensorType[] } = {
   height: [SensorType.WaterLevel, SensorType.Door],
   width: [SensorType.WaterLevel, SensorType.Door],
   fontSize: [SensorType.WaterLevel, SensorType.AirQuality],
   radius: [SensorType.AirQuality],
   orientation: [SensorType.Door, SensorType.AirQuality],
-  side: [SensorType.Door]
+  side: [SensorType.Door],
 }
 
-const sensorTypeSelectOptions: Array<{ label: string, value: SensorType }> = [
+const sensorTypeSelectOptions: SelectSensorTypeOptions[] = [
   {
     label: 'Air quality',
-    value: SensorType.AirQuality
+    value: SensorType.AirQuality,
   },
   {
     label: 'Water level',
-    value: SensorType.WaterLevel
+    value: SensorType.WaterLevel,
   },
   {
     label: 'Door',
-    value: SensorType.Door
-  }
+    value: SensorType.Door,
+  },
 ]
 
-const orientationOptions: Array<{ label: string, value: Orientation }> = [
+const orientationOptions: SelectOrientationOptions[] = [
   {
     label: 'Top',
-    value: Orientation.Top
+    value: Orientation.Top,
   },
   {
     label: 'Bottom',
-    value: Orientation.Bottom
+    value: Orientation.Bottom,
   },
   {
     label: 'Left',
-    value: Orientation.Left
+    value: Orientation.Left,
   },
   {
     label: 'Right',
-    value: Orientation.Right
-  }
+    value: Orientation.Right,
+  },
 ]
 
-const sideOptions: Array<{ label: string, value: Side }> = [
+const sideOptions: SelectSideOptions[] = [
   {
     label: 'Start',
-    value: Side.Start
+    value: Side.Start,
   },
   {
     label: 'End',
-    value: Side.End
-  }
+    value: Side.End,
+  },
 ]
 
-export const SensorEditor: React.FC<Props> = ({
-  context,
-  onChange,
-  value
-}) => {
+export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
   const styles = useStyles2(getStyles)
+  const theme = useTheme2()
 
   const [dataFrameEditorCollapseStates, setaDtaFrameEditorCollapseStates] = useState<boolean[]>([])
   let sensorOptions: SensorOptions = {
@@ -83,14 +95,17 @@ export const SensorEditor: React.FC<Props> = ({
   }
   const isSingleDataFrameSensor = sensorTypesWithOneDataFrame.includes(sensorOptions.type)
 
-  let dataFramesOptionsList: Array<DataFrameOptions> = sensorOptions.dataFramesOptionsList || []
+  let dataFramesOptionsList: DataFrameOptions[] = sensorOptions.dataFramesOptionsList || []
 
-  const defaultOptionsService: DefaultOptionsService = DefaultOptionsService.getInstance()
+  const defaultOptionsService: DefaultOptionsService = DefaultOptionsService.getInstance(theme)
 
-  const inlineFieldInputGenerator: InlineFieldInputGenerator<SensorOptions> = new InlineFieldInputGenerator(sensorOptions, onChange)
+  const inlineFieldInputGenerator: InlineFieldInputGenerator<SensorOptions> = new InlineFieldInputGenerator(
+    sensorOptions,
+    onChange
+  )
 
   const isInputVisible = (input: string) => {
-    const sensorTypesVisible: Array<SensorType> = inputVisibilityMap[input]
+    const sensorTypesVisible: SensorType[] = inputVisibilityMap[input]
 
     if (!sensorTypesVisible) {
       return true
@@ -196,8 +211,9 @@ export const SensorEditor: React.FC<Props> = ({
     return dataFramesOptionsList.map((dataFrameOptions, index) => {
       return (
         <DataFrameEditor
+          key={index}
           context={context}
-          onChange={value => onChangeDataFrame(value, index)}
+          onChange={(value) => onChangeDataFrame(value, index)}
           sensorType={sensorOptions.type}
           value={dataFrameOptions}
         />
@@ -208,8 +224,9 @@ export const SensorEditor: React.FC<Props> = ({
   const getCollapsibleDataFramEditors = () => {
     return dataFramesOptionsList.map((dataFrameOptions, index) => {
       return (
-        <Fragment>
+        <Fragment key={index}>
           <CollapseEditor
+            key={index}
             collapsible
             isOpen={isDataFrameEditorCollapseOpen(index)}
             label={`Data frame ${dataFrameOptions.fieldName}`}
@@ -223,7 +240,7 @@ export const SensorEditor: React.FC<Props> = ({
           >
             <DataFrameEditor
               context={context}
-              onChange={value => onChangeDataFrame(value, index)}
+              onChange={(value) => onChangeDataFrame(value, index)}
               sensorType={sensorOptions.type}
               value={dataFrameOptions}
             />
@@ -238,7 +255,11 @@ export const SensorEditor: React.FC<Props> = ({
     let dataFrameEditors
 
     if (!isSingleDataFrameSensor) {
-      buttonAdd = <Button className={styles.buttonAddDataFrames} icon="plus" onClick={addDataFrame} size="sm" variant="secondary">Add data frame</Button>
+      buttonAdd = (
+        <Button className={styles.buttonAddDataFrames} icon="plus" onClick={addDataFrame} size="sm" variant="secondary">
+          Add data frame
+        </Button>
+      )
       dataFrameEditors = getCollapsibleDataFramEditors()
     } else {
       dataFrameEditors = getDataFrameEditors()
@@ -261,13 +282,8 @@ export const SensorEditor: React.FC<Props> = ({
     <div className={styles.wrapper}>
       {inlineFieldInputGenerator.getInlineFieldInput('Name', 'text', 'name')}
       <InlineField label="Sensor tpye">
-        <RadioButtonGroup
-          onChange={onChangeSensorType}
-          options={sensorTypeSelectOptions}
-          value={sensorOptions.type}
-        />
+        <RadioButtonGroup onChange={onChangeSensorType} options={sensorTypeSelectOptions} value={sensorOptions.type} />
       </InlineField>
-
       {inlineFieldInputGenerator.getInlineFieldInput('Link', 'string', 'link')}
       {inlineFieldInputGenerator.getInlineFieldInput('X', 'number', 'x')}
       {inlineFieldInputGenerator.getInlineFieldInput('Y', 'number', 'y')}
@@ -276,27 +292,17 @@ export const SensorEditor: React.FC<Props> = ({
       {isInputVisible('radius') && inlineFieldInputGenerator.getInlineFieldInput('Radius', 'number', 'radius')}
       {isInputVisible('fontSize') && inlineFieldInputGenerator.getInlineFieldInput('Font size', 'number', 'fontSize')}
 
-      {
-        isInputVisible('orientation') &&
+      {isInputVisible('orientation') && (
         <InlineField label="Orientation">
-          <RadioButtonGroup
-            onChange={onChangeDoorOrientation}
-            options={orientationOptions}
-            value={value.orientation}
-          />
+          <RadioButtonGroup onChange={onChangeDoorOrientation} options={orientationOptions} value={value.orientation} />
         </InlineField>
-      }
+      )}
 
-      {
-        isInputVisible('side') &&
+      {isInputVisible('side') && (
         <InlineField label="Side">
-          <RadioButtonGroup
-            onChange={onChangeDoorSide}
-            options={sideOptions}
-            value={value.side}
-          />
+          <RadioButtonGroup onChange={onChangeDoorSide} options={sideOptions} value={value.side} />
         </InlineField>
-      }
+      )}
 
       {getDataFrameSection()}
     </div>
@@ -319,6 +325,6 @@ const getStyles = (theme: GrafanaTheme2) => {
       margin-bottom: ${theme.spacing(1)};
       width: 100%;
       justify-content: center;
-    `
+    `,
   }
 }

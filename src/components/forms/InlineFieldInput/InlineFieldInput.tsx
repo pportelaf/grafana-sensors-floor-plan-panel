@@ -11,13 +11,7 @@ interface Props {
 export const InlineFieldInput: React.FC<Props> = ({ label, type, value, onChange }) => {
   return (
     <InlineField label={label}>
-      <Input
-        css=""
-        placeholder={label}
-        type={type}
-        value={value}
-        onChange={onChange}
-      />
+      <Input css="" placeholder={label} type={type} value={value} onChange={onChange} />
     </InlineField>
   )
 }

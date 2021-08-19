@@ -12,35 +12,34 @@ interface Props {
   value: FloorPlanOptions
 }
 
-export const FloorPlan: React.FC<Props> = ({
-  dataFrames,
-  value
-}) => {
+export const FloorPlan: React.FC<Props> = ({ dataFrames, value }) => {
   const styles = useStyles2(getStyles)
   const strokeWidth = value.strokeWidth || 0
   let x = value.x || 0
   let y = value.y || 0
 
-  x = x + (strokeWidth / 2)
-  y = y + (strokeWidth / 2)
+  x = x + strokeWidth / 2
+  y = y + strokeWidth / 2
 
   const isDataFrameRequiredForSensor = (dataFrame: DataFrame, dataFrameOptions: DataFrameOptions) => {
-    return dataFrame.fields.some(field => {
-      return (dataFrameOptions.fieldName === field.name) &&
-        (dataFrameOptions.facility === field.labels?.facility) &&
-        (dataFrameOptions.plot === field.labels?.plot)
+    return dataFrame.fields.some((field) => {
+      return (
+        dataFrameOptions.fieldName === field.name &&
+        dataFrameOptions.facility === field.labels?.facility &&
+        dataFrameOptions.plot === field.labels?.plot
+      )
     })
   }
 
-  const getDataFramesWithSettings = (dataFrameOptionsList: Array<DataFrameOptions>): Array<DataFrameWithSettings> => {
-    const dataFrameWithSettings: Array<DataFrameWithSettings> = []
+  const getDataFramesWithSettings = (dataFrameOptionsList: DataFrameOptions[]): DataFrameWithSettings[] => {
+    const dataFrameWithSettings: DataFrameWithSettings[] = []
 
-    dataFrameOptionsList.forEach(dataFrameOptions => {
-      dataFrames.forEach(dataFrame => {
+    dataFrameOptionsList.forEach((dataFrameOptions) => {
+      dataFrames.forEach((dataFrame) => {
         if (isDataFrameRequiredForSensor(dataFrame, dataFrameOptions)) {
           dataFrameWithSettings.push({
             dataFrame,
-            settings: dataFrameOptions
+            settings: dataFrameOptions,
           })
         }
       })
@@ -52,8 +51,9 @@ export const FloorPlan: React.FC<Props> = ({
   const getSensorList = () => {
     return (
       <React.Fragment>
-        {value.sensorOptionsList?.map(sensorOptions => (
+        {value.sensorOptionsList?.map((sensorOptions, index) => (
           <SensorView
+            key={index}
             sensorOptions={sensorOptions}
             fill={value.fill}
             floorPlanOptions={value}
@@ -67,16 +67,11 @@ export const FloorPlan: React.FC<Props> = ({
   const getLabel = () => {
     const width = value.width || 0
     const color = value.labelOptions?.color || ''
-    const labelX = (width / 2) + x
+    const labelX = width / 2 + x
     const fontSize = value.labelOptions?.fontSize || 0
 
     return (
-      <text
-        className={styles.label(fontSize, color)}
-        y={value.labelOptions?.y}
-        x={labelX}
-        text-anchor="middle"
-      >
+      <text className={styles.label(fontSize, color)} y={value.labelOptions?.y} x={labelX} textAnchor="middle">
         {value.name}
       </text>
     )
@@ -89,7 +84,7 @@ export const FloorPlan: React.FC<Props> = ({
         y={y}
         width={value.width}
         height={value.height}
-        stroke-width={value.strokeWidth}
+        strokeWidth={value.strokeWidth}
         stroke={value.stroke}
         fill={value.fill}
       />
@@ -105,6 +100,6 @@ const getStyles = (theme: GrafanaTheme2) => {
     label: (fontSize: number, color: string) => css`
       font-size: ${fontSize}px;
       fill: ${color};
-    `
+    `,
   }
 }

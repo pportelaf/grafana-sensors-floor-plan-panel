@@ -8,7 +8,7 @@ import { FloorPlanOptions } from '../../../editor/FloorPlanEditor/FloorPlanOptio
 import { SensorOptions } from '../../../editor/SensorEditor/SensorOptions'
 
 interface Props {
-  dataFramesWithSettings: Array<DataFrameWithSettings>
+  dataFramesWithSettings: DataFrameWithSettings[]
   fill: string | undefined
   floorPlanOptions: FloorPlanOptions
   sensorOptions: SensorOptions
@@ -18,19 +18,13 @@ export const SensorWaterLevel: React.FC<Props> = ({
   dataFramesWithSettings,
   fill,
   floorPlanOptions,
-  sensorOptions
+  sensorOptions,
 }) => {
   const styles = useStyles2(getStyles)
   const theme: GrafanaTheme2 = useTheme2()
 
   const strokeWidth = 1.5
-  const {
-    fontSize = 14,
-    height = 0,
-    x = 0,
-    y = 0,
-    width = 0
-  } = sensorOptions
+  const { fontSize = 14, height = 0, x = 0, y = 0, width = 0 } = sensorOptions
   const { stroke: wallStroke } = floorPlanOptions
   const textX = width / 2
   const textY = 0
@@ -40,7 +34,7 @@ export const SensorWaterLevel: React.FC<Props> = ({
   let lastDataFormatted: string | number = '-'
   let activeThreshold: Threshold = {
     color: theme.colors.text.disabled,
-    value: 0
+    value: 0,
   }
 
   const sensorDataFramesConverter: SensorDataFramesConverter = new SensorDataFramesConverter(dataFramesWithSettings)
@@ -59,12 +53,7 @@ export const SensorWaterLevel: React.FC<Props> = ({
 
   const getContent = () => {
     return (
-      <g
-        fill={fill}
-        stroke={wallStroke}
-        stroke-width={strokeWidth}
-        transform={`translate(${x}, ${y})`}
-      >
+      <g fill={fill} stroke={wallStroke} strokeWidth={strokeWidth} transform={`translate(${x}, ${y})`}>
         <rect
           className={styles.rect}
           x="0"
@@ -94,12 +83,8 @@ export const SensorWaterLevel: React.FC<Props> = ({
 
     if (sensorOptions.link) {
       return (
-        <a
-          className={styles.link}
-          href={sensorOptions.link}
-          target="_blank"
-        >
-          { content }
+        <a className={styles.link} href={sensorOptions.link} target="_blank" rel="noreferrer">
+          {content}
         </a>
       )
     }
@@ -127,6 +112,6 @@ const getStyles = (theme: GrafanaTheme2) => {
       a:hover & {
         filter: drop-shadow(8px 8px 4px);
       }
-    `
+    `,
   }
 }

@@ -14,13 +14,12 @@ interface Props {
   context: StandardEditorContext<any>
 }
 
-export const DataFrameEditor: React.FC<Props> = ({
-  context,
-  onChange,
-  sensorType,
-  value
+interface SelectOptions {
+  label: string
+  value: string
+}
 
-}) => {
+export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType, value }) => {
   const styles = useStyles2(getStyles)
   let dataFrameOptions: DataFrameOptions = {
     ...value,
@@ -63,12 +62,16 @@ export const DataFrameEditor: React.FC<Props> = ({
   const onChangeDecimals = ({ target }: any) => {
     const value = target.value
 
-    dataFrameOptions.decimals = (value !== 0 && value !== undefined) ? Number(value) : value
+    if (value !== 0 && value !== undefined) {
+      dataFrameOptions.decimals = Number(value)
+    } else {
+      dataFrameOptions.decimals = value
+    }
 
     onChange(dataFrameOptions)
   }
 
-  const onChangeThresholds = (thresholds: Array<ThresholdOptions> | undefined) => {
+  const onChangeThresholds = (thresholds: ThresholdOptions[] | undefined) => {
     dataFrameOptions.thresholds = thresholds || []
 
     onChange(dataFrameOptions)
@@ -86,12 +89,7 @@ export const DataFrameEditor: React.FC<Props> = ({
       </InlineField>
 
       <InlineField label="Plot">
-        <Select
-          allowCustomValue
-          onChange={onChangePlot}
-          options={plotSelectOptions}
-          value={dataFrameOptions.plot}
-        />
+        <Select allowCustomValue onChange={onChangePlot} options={plotSelectOptions} value={dataFrameOptions.plot} />
       </InlineField>
 
       <InlineField label="Field name">
@@ -104,28 +102,15 @@ export const DataFrameEditor: React.FC<Props> = ({
       </InlineField>
 
       <InlineField label="Label">
-        <Input
-          css=""
-          onChange={onChangeLabel}
-          type="text"
-          value={dataFrameOptions.label}
-        />
+        <Input css="" onChange={onChangeLabel} type="text" value={dataFrameOptions.label} />
       </InlineField>
 
       <InlineField label="Unit">
-        <UnitPicker
-          onChange={onchangeUnit}
-          value={dataFrameOptions.unit}
-        />
+        <UnitPicker onChange={onchangeUnit} value={dataFrameOptions.unit} />
       </InlineField>
 
       <InlineField label="Decimals">
-        <Input
-          css=""
-          onChange={onChangeDecimals}
-          type="number"
-          value={dataFrameOptions.decimals}
-        />
+        <Input css="" onChange={onChangeDecimals} type="number" value={dataFrameOptions.decimals} />
       </InlineField>
 
       <ThresholdsEditor
@@ -138,14 +123,14 @@ export const DataFrameEditor: React.FC<Props> = ({
   )
 }
 
-const getFacilitySelectOptions = (labels: Array<Labels>, dataFrameOptions: DataFrameOptions): Array<{ label: string, value: string }> => {
-  let facilitySelectOptions: Array<{ label: string, value: string }> = []
+const getFacilitySelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptions): SelectOptions[] => {
+  let facilitySelectOptions: SelectOptions[] = []
 
   if (dataFrameOptions.facility) {
     facilitySelectOptions.push({ value: dataFrameOptions.facility, label: dataFrameOptions.facility })
   }
 
-  labels.forEach(label => {
+  labels.forEach((label) => {
     const facilityLabel = label.facility || ''
 
     if (facilityLabel !== '' && !isLabelInSelectOptions(facilityLabel, facilitySelectOptions)) {
@@ -156,8 +141,8 @@ const getFacilitySelectOptions = (labels: Array<Labels>, dataFrameOptions: DataF
   return facilitySelectOptions
 }
 
-const getPlotSelectOptions = (labels: Array<Labels>, dataFrameOptions: DataFrameOptions): Array<{ label: string, value: string }> => {
-  let plotSelectOptions: Array<{ label: string, value: string }> = []
+const getPlotSelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptions): SelectOptions[] => {
+  let plotSelectOptions: SelectOptions[] = []
   let labelsWithCurrentFacility = labels
 
   if (dataFrameOptions.plot) {
@@ -168,7 +153,7 @@ const getPlotSelectOptions = (labels: Array<Labels>, dataFrameOptions: DataFrame
     labelsWithCurrentFacility = labels.filter(({ facility }) => facility === dataFrameOptions.facility)
   }
 
-  labelsWithCurrentFacility.forEach(label => {
+  labelsWithCurrentFacility.forEach((label) => {
     const plotLabel = label.plot || ''
 
     if (plotLabel !== '' && !isLabelInSelectOptions(plotLabel, plotSelectOptions)) {
@@ -179,8 +164,8 @@ const getPlotSelectOptions = (labels: Array<Labels>, dataFrameOptions: DataFrame
   return plotSelectOptions
 }
 
-const getFieldNameSelectOptions = (labels: Array<Labels>, dataFrameOptions: DataFrameOptions): Array<{ label: string, value: string }> => {
-  let fieldNameSelectOptions: Array<{ label: string, value: string }> = []
+const getFieldNameSelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptions): SelectOptions[] => {
+  let fieldNameSelectOptions: SelectOptions[] = []
   let labelsWithCurrentFilters = labels
   let facilitySelected = dataFrameOptions.facility
   let plotSelected = dataFrameOptions.plot
@@ -191,11 +176,11 @@ const getFieldNameSelectOptions = (labels: Array<Labels>, dataFrameOptions: Data
 
   if (facilitySelected !== '' && plotSelected !== '') {
     labelsWithCurrentFilters = labels.filter(({ facility, plot }) => {
-      return (facility === facilitySelected) && (plot === plotSelected)
+      return facility === facilitySelected && plot === plotSelected
     })
   }
 
-  labelsWithCurrentFilters.forEach(label => {
+  labelsWithCurrentFilters.forEach((label) => {
     const fieldNameLabel = label.name || ''
 
     if (fieldNameLabel !== '' && !isLabelInSelectOptions(fieldNameLabel, fieldNameSelectOptions)) {
@@ -206,15 +191,15 @@ const getFieldNameSelectOptions = (labels: Array<Labels>, dataFrameOptions: Data
   return fieldNameSelectOptions
 }
 
-const isLabelInSelectOptions = (label: string, selectOptions: Array<{ label: string, value: string }>): boolean => {
+const isLabelInSelectOptions = (label: string, selectOptions: SelectOptions[]): boolean => {
   return !!selectOptions.find(({ value }) => value === label)
 }
 
-const getDataFramesLabels = (context: StandardEditorContext<any>, sensorType: SensorType): Array<Labels> => {
-  let labels: Array<Labels> = []
+const getDataFramesLabels = (context: StandardEditorContext<any>, sensorType: SensorType): Labels[] => {
+  let labels: Labels[] = []
 
-  filterDataFramesByMeasurement(context.data || [], sensorType).forEach(dataFrame => {
-    dataFrame.fields.forEach(field => {
+  filterDataFramesByMeasurement(context.data || [], sensorType).forEach((dataFrame) => {
+    dataFrame.fields.forEach((field) => {
       if (field.type !== 'time' && field.labels) {
         labels.push({ ...field.labels, name: field.name })
       }
@@ -224,8 +209,8 @@ const getDataFramesLabels = (context: StandardEditorContext<any>, sensorType: Se
   return labels
 }
 
-const filterDataFramesByMeasurement = (dataFrames: Array<DataFrame>, sensorType: SensorType): Array<DataFrame> => {
-  return dataFrames.filter(dataFrame => dataFrame.name === sensorType)
+const filterDataFramesByMeasurement = (dataFrames: DataFrame[], sensorType: SensorType): DataFrame[] => {
+  return dataFrames.filter((dataFrame) => dataFrame.name === sensorType)
 }
 
 const getStyles = (theme: GrafanaTheme2) => {
@@ -235,6 +220,6 @@ const getStyles = (theme: GrafanaTheme2) => {
     `,
     thresholdsEditor: css`
       margin-top: ${theme.spacing(2)};
-    `
+    `,
   }
 }

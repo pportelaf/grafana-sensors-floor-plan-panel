@@ -13,12 +13,7 @@ interface Props {
   sensorOptions: SensorOptions
 }
 
-export const SensorView: React.FC<Props> = ({
-  dataFramesWithSettings,
-  fill,
-  floorPlanOptions,
-  sensorOptions,
-}) => {
+export const SensorView: React.FC<Props> = ({ dataFramesWithSettings, fill, floorPlanOptions, sensorOptions }) => {
   const getSensorComponent = () => {
     switch (sensorOptions.type) {
       case SensorType.AirQuality:
@@ -53,7 +48,5 @@ export const SensorView: React.FC<Props> = ({
     }
   }
 
-  return (
-    getSensorComponent()
-  )
+  return getSensorComponent()
 }

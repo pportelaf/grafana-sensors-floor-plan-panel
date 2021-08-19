@@ -25,7 +25,7 @@ export const SensorDoorView: React.FC<Props> = ({
   side,
   wallStrokeWidth = 0,
   offsetX = 0,
-  offsetY = 0
+  offsetY = 0,
 }) => {
   const styles = useStyles2(getStyles)
   const isVerticalOrientation = orientation === Orientation.Top || orientation === Orientation.Bottom
@@ -78,7 +78,6 @@ export const SensorDoorView: React.FC<Props> = ({
     }
 
     return getHorizontalTransformOrigin()
-
   }
 
   const getVerticalTransformOrigin = () => {
@@ -134,7 +133,7 @@ export const SensorDoorView: React.FC<Props> = ({
         className={cx(
           styles.door(transformOrigin),
           { [styles.doorOpen]: isOpen },
-          { [styles.doorClosed(doorClosedRotateDegrees)]: !isOpen },
+          { [styles.doorClosed(doorClosedRotateDegrees)]: !isOpen }
         )}
         x={x}
         y={y}
@@ -145,9 +144,7 @@ export const SensorDoorView: React.FC<Props> = ({
     )
   }
 
-  return (
-    getDoor()
-  )
+  return getDoor()
 }
 
 const getStyles = (theme: GrafanaTheme2) => {
