@@ -136,23 +136,21 @@ jobs:
           draft: true
 
       - name: Add plugin to release
-        id: upload-plugin-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: upload-release-action
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.metadata.outputs.archive }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./${{ steps.metadata.outputs.archive }}
           asset_name: ${{ steps.metadata.outputs.archive }}
-          asset_content_type: application/zip
+          overwrite: true
+          tag: ${{ github.ref }}
 
       - name: Add checksum to release
         id: upload-checksum-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.metadata.outputs.archive-checksum }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./${{ steps.metadata.outputs.archive-checksum }}
           asset_name: ${{ steps.metadata.outputs.archive-checksum }}
-          asset_content_type: text/plain
+          overwrite: true
+          tag: ${{ github.ref }}
