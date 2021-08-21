@@ -76,7 +76,7 @@ jobs:
           args: buildAll
 
       - name: Sign plugin
-        run: yarn sign --rootUrls https://localhost:3000,https://grafana:3000 --signatureType private
+        run: yarn sign --rootUrls https://localhost:3000,https://grafana.pportelaftfg.gq:3000 --signatureType private
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }} # Requires a Grafana API key from Grafana.com.
 
