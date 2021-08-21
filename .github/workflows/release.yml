@@ -124,6 +124,12 @@ jobs:
           popd
           plugincheck -private ${{ steps.metadata.outputs.archive }}
 
+      - name: Get changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -132,8 +138,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body_path: ${{ steps.changelog.outputs.path }}
-          draft: true
+          body: ${{steps.github_release.outputs.changelog}}
 
       - name: Add plugin to release
         id: upload-release-action
