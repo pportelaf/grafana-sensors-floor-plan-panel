@@ -89,7 +89,12 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
       </InlineField>
 
       <InlineField label="Location">
-        <Select allowCustomValue onChange={onChangeLocation} options={locationSelectOptions} value={dataFrameOptions.location} />
+        <Select
+          allowCustomValue
+          onChange={onChangeLocation}
+          options={locationSelectOptions}
+          value={dataFrameOptions.location}
+        />
       </InlineField>
 
       <InlineField label="Field name">
