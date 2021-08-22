@@ -26,7 +26,7 @@ export const FloorPlan: React.FC<Props> = ({ dataFrames, value }) => {
       return (
         dataFrameOptions.fieldName === field.name &&
         dataFrameOptions.facility === field.labels?.facility &&
-        dataFrameOptions.plot === field.labels?.plot
+        dataFrameOptions.location === field.labels?.location
       )
     })
   }

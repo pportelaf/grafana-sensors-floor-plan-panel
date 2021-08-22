@@ -5,7 +5,7 @@ export interface DataFrameOptions {
   facility: string
   fieldName: string
   label?: string
-  plot: string
+  location: string
   thresholds: ThresholdOptions[]
   unit: string
 }
