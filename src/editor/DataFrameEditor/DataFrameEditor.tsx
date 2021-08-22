@@ -26,7 +26,7 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
   }
   const dataFramesLabels = getDataFramesLabels(context, sensorType)
   const facilitySelectOptions = getFacilitySelectOptions(dataFramesLabels, dataFrameOptions)
-  const plotSelectOptions = getPlotSelectOptions(dataFramesLabels, dataFrameOptions)
+  const locationSelectOptions = getLocationSelectOptions(dataFramesLabels, dataFrameOptions)
   const fieldNameSelectOptions = getFieldNameSelectOptions(dataFramesLabels, dataFrameOptions)
 
   const onChangeFacility = ({ value }: any) => {
@@ -35,8 +35,8 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
     onChange(dataFrameOptions)
   }
 
-  const onChangePlot = ({ value }: any) => {
-    dataFrameOptions.plot = value
+  const onChangeLocation = ({ value }: any) => {
+    dataFrameOptions.location = value
 
     onChange(dataFrameOptions)
   }
@@ -88,8 +88,13 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
         />
       </InlineField>
 
-      <InlineField label="Plot">
-        <Select allowCustomValue onChange={onChangePlot} options={plotSelectOptions} value={dataFrameOptions.plot} />
+      <InlineField label="Location">
+        <Select
+          allowCustomValue
+          onChange={onChangeLocation}
+          options={locationSelectOptions}
+          value={dataFrameOptions.location}
+        />
       </InlineField>
 
       <InlineField label="Field name">
@@ -141,12 +146,12 @@ const getFacilitySelectOptions = (labels: Labels[], dataFrameOptions: DataFrameO
   return facilitySelectOptions
 }
 
-const getPlotSelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptions): SelectOptions[] => {
-  let plotSelectOptions: SelectOptions[] = []
+const getLocationSelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptions): SelectOptions[] => {
+  let locationSelectOptions: SelectOptions[] = []
   let labelsWithCurrentFacility = labels
 
-  if (dataFrameOptions.plot) {
-    plotSelectOptions.push({ label: dataFrameOptions.plot, value: dataFrameOptions.plot })
+  if (dataFrameOptions.location) {
+    locationSelectOptions.push({ label: dataFrameOptions.location, value: dataFrameOptions.location })
   }
 
   if (dataFrameOptions.facility !== '') {
@@ -154,29 +159,29 @@ const getPlotSelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptio
   }
 
   labelsWithCurrentFacility.forEach((label) => {
-    const plotLabel = label.plot || ''
+    const locationLabel = label.location || ''
 
-    if (plotLabel !== '' && !isLabelInSelectOptions(plotLabel, plotSelectOptions)) {
-      plotSelectOptions.push({ value: plotLabel, label: plotLabel })
+    if (locationLabel !== '' && !isLabelInSelectOptions(locationLabel, locationSelectOptions)) {
+      locationSelectOptions.push({ value: locationLabel, label: locationLabel })
     }
   })
 
-  return plotSelectOptions
+  return locationSelectOptions
 }
 
 const getFieldNameSelectOptions = (labels: Labels[], dataFrameOptions: DataFrameOptions): SelectOptions[] => {
   let fieldNameSelectOptions: SelectOptions[] = []
   let labelsWithCurrentFilters = labels
   let facilitySelected = dataFrameOptions.facility
-  let plotSelected = dataFrameOptions.plot
+  let locationSelected = dataFrameOptions.location
 
   if (dataFrameOptions.fieldName) {
     fieldNameSelectOptions.push({ value: dataFrameOptions.fieldName, label: dataFrameOptions.fieldName })
   }
 
-  if (facilitySelected !== '' && plotSelected !== '') {
-    labelsWithCurrentFilters = labels.filter(({ facility, plot }) => {
-      return facility === facilitySelected && plot === plotSelected
+  if (facilitySelected !== '' && locationSelected !== '') {
+    labelsWithCurrentFilters = labels.filter(({ facility, location }) => {
+      return facility === facilitySelected && location === locationSelected
     })
   }
 
