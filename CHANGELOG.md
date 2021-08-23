@@ -11,3 +11,7 @@
 ## 1.1.0
 
 - Rename plot tag key as location
+
+## 1.1.1
+
+- Fix SensorAirQuality margin text
