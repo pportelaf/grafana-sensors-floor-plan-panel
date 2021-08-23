@@ -70,14 +70,14 @@ export const SensorAirQuality: React.FC<Props> = ({
   const getCircles = () => {
     return (
       <g className={styles.circleWrapperWithLink}>
-        <circle className={cx(styles.circle(activeThreshold.color))} cx="0" cy="0" r={radius} />
+        <circle className={cx(styles.circle(activeThreshold.color))} cx="0" cy={pulseRadius} r={radius} />
 
         <circle
           className={cx(styles.disk1(activeThreshold.color, radius, pulseScale, pulseSpeed), {
             [styles.diskNoData]: !hasData,
           })}
           cx="0"
-          cy="0"
+          cy={pulseRadius}
           fill="none"
           r={pulseRadius}
           strokeWidth="2"
@@ -88,7 +88,7 @@ export const SensorAirQuality: React.FC<Props> = ({
             [styles.diskNoData]: !hasData,
           })}
           cx="0"
-          cy="0"
+          cy={pulseRadius}
           fill="none"
           r={pulseRadius}
           strokeWidth="2"
@@ -103,13 +103,13 @@ export const SensorAirQuality: React.FC<Props> = ({
 
     const textClassName = cx(styles.text, {
       [styles.textCenterHorizontal]: isHorizontallyCentered,
-      [styles.textCenterVertical(pulseRadius)]: isVerticallyCentered,
+      [styles.textCenterVertical(pulseDiameter)]: isVerticallyCentered,
       [styles.textLeft(pulseRadius)]: sensorOptions.orientation === Orientation.Left,
       [styles.textTop(textLines, pulseRadius)]: sensorOptions.orientation === Orientation.Top,
     })
 
     if (sensorOptions.orientation === Orientation.Bottom) {
-      textY = pulseDiameter
+      textY = pulseDiameter + fontSize * lineHeight
     } else if (sensorOptions.orientation === Orientation.Right) {
       textX = pulseRadius + pulseRadius / 2
     }
@@ -255,8 +255,8 @@ const getStyles = (theme: GrafanaTheme2) => {
     textCenterHorizontal: css`
       transform: translate(-50%, 0);
     `,
-    textCenterVertical: (circleRadius: number) => css`
-      transform: translate(0, calc(-50% + ${circleRadius}px));
+    textCenterVertical: (circleDiameter: number) => css`
+      transform: translate(0, calc(-50% + ${circleDiameter}px));
     `,
   }
 }
