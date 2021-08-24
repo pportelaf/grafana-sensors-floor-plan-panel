@@ -24,3 +24,7 @@
 ## 2.0.1
 
 - Fix delete errors on duplicated floor plans, sensors or thresholds
+
+## 2.0.2
+
+- Fix error filtering sensor data frames by device

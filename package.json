@@ -1,6 +1,6 @@
 {
   "name": "grafana-sensors-floor-plan-panel",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Grafana plugin panel for display a floor plan with sensors",
   "scripts": {
     "build": "grafana-toolkit plugin:build",

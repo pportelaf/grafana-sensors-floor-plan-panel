@@ -39,13 +39,18 @@ export const FloorPlan: React.FC<Props> = ({ dataFrames, value }) => {
   }
 
   const isDataFrameRequiredForSensor = (dataFrame: DataFrame, dataFrameOptions: DataFrameOptions) => {
-    return dataFrame.fields.some((field) => {
-      return (
-        dataFrameOptions.fieldName === field.name &&
-        dataFrameOptions.facility === field.labels?.facility &&
-        dataFrameOptions.location === field.labels?.location
-      )
-    })
+    const isSameDataFrameName = dataFrame.name === dataFrameOptions.name
+
+    return (
+      isSameDataFrameName &&
+      dataFrame.fields.some((field) => {
+        return (
+          dataFrameOptions.fieldName === field.name &&
+          dataFrameOptions.facility === field.labels?.facility &&
+          dataFrameOptions.location === field.labels?.location
+        )
+      })
+    )
   }
 
   const getSensorList = () => {
