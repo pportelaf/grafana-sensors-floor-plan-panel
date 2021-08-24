@@ -136,7 +136,7 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
 
       <ThresholdsEditor
         className={styles.thresholdsEditor}
-        hasPriority={sensorType === SensorType.AirQuality}
+        hasPriority={sensorType === SensorType.Default}
         onChange={onChangeThresholds}
         value={dataFrameOptions.thresholds}
       />

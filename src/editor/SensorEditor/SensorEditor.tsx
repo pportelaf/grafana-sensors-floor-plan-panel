@@ -30,20 +30,20 @@ interface SelectSideOptions {
   value: Side
 }
 
-const sensorTypesWithOneDataFrame = [SensorType.WaterLevel, SensorType.Door]
+const sensorTypesMultipleDataFrame = [SensorType.Default]
 const inputVisibilityMap: { [key: string]: SensorType[] } = {
   height: [SensorType.WaterLevel, SensorType.Door],
   width: [SensorType.WaterLevel, SensorType.Door],
-  fontSize: [SensorType.WaterLevel, SensorType.AirQuality],
-  radius: [SensorType.AirQuality],
-  orientation: [SensorType.Door, SensorType.AirQuality],
+  fontSize: [SensorType.WaterLevel, SensorType.Default],
+  radius: [SensorType.Default],
+  orientation: [SensorType.Door, SensorType.Default],
   side: [SensorType.Door],
 }
 
 const sensorTypeSelectOptions: SelectSensorTypeOptions[] = [
   {
-    label: 'Air quality',
-    value: SensorType.AirQuality,
+    label: 'Default',
+    value: SensorType.Default,
   },
   {
     label: 'Water level',
@@ -93,7 +93,7 @@ export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
   let sensorOptions: SensorOptions = {
     ...value,
   }
-  const isSingleDataFrameSensor = sensorTypesWithOneDataFrame.includes(sensorOptions.type)
+  const isMultipleDataFrameSensor = sensorTypesMultipleDataFrame.includes(sensorOptions.type)
 
   let dataFramesOptionsList: DataFrameOptions[] = sensorOptions.dataFramesOptionsList || []
 
@@ -187,7 +187,7 @@ export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
 
     sensorOptions.dataFramesOptionsList = [...dataFramesOptionsList]
 
-    if (!isSingleDataFrameSensor) {
+    if (isMultipleDataFrameSensor) {
       toggleDataFrameEditorCollapse(sensorOptions.dataFramesOptionsList.length - 1)
     }
 
@@ -255,7 +255,7 @@ export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
     let buttonAdd
     let dataFrameEditors
 
-    if (!isSingleDataFrameSensor) {
+    if (isMultipleDataFrameSensor) {
       buttonAdd = (
         <Button className={styles.buttonAddDataFrames} icon="plus" onClick={addDataFrame} size="sm" variant="secondary">
           Add data frame
@@ -275,7 +275,8 @@ export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
     )
   }
 
-  if (isSingleDataFrameSensor && dataFramesOptionsList.length === 0) {
+  // Atuo add a data frame if is a single data frame sensor
+  if (!isMultipleDataFrameSensor && dataFramesOptionsList.length === 0) {
     addDataFrame()
   }
 

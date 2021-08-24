@@ -14,7 +14,7 @@ interface Props {
   sensorOptions: SensorOptions
 }
 
-export const SensorAirQuality: React.FC<Props> = ({
+export const SensorDefault: React.FC<Props> = ({
   fill,
   floorPlanOptions,
   dataFramesWithSettings,
