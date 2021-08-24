@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
 import { useStyles2, useTheme2, Button, InlineField, InlineSwitch } from '@grafana/ui'
 import { css } from 'emotion'
+import cloneDeep from 'lodash.clonedeep'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from './FloorPlanOptions'
 import { LabelOptions } from 'editor/LabelEditor/LabelOptions'
@@ -104,7 +105,7 @@ export const FloorPlanEditor: React.FC<Props> = ({ context, onChange, value = {}
   }
 
   const onCopySensor = (index: number) => {
-    let sensor = { ...sensorOptionsList[index] }
+    let sensor = cloneDeep(sensorOptionsList[index])
     sensor.name = `${sensor.name} (copy)`
 
     sensorOptionsList.push(sensor)

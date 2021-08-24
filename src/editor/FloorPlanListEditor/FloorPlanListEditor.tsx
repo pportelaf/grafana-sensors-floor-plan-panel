@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { GrafanaTheme2, StandardEditorProps } from '@grafana/data'
 import { Button, useStyles2, useTheme2 } from '@grafana/ui'
 import { css } from 'emotion'
+import cloneDeep from 'lodash.clonedeep'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { FloorPlanOptions } from 'editor/FloorPlanEditor/FloorPlanOptions'
 import { CollapseEditor } from 'components/CollapseEditor/CollapseEditor'
@@ -54,7 +55,7 @@ export const FloorPlanListEditor: React.FC<Props> = ({ context, item, onChange, 
   }
 
   const onCopy = (index: number) => {
-    let floorPlan = { ...floorPlanOptions[index] }
+    let floorPlan = cloneDeep(floorPlanOptions[index])
     floorPlan.name = `${floorPlan.name} (copy)`
 
     floorPlanOptions.push(floorPlan)
