@@ -87,12 +87,7 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
   return (
     <div className={styles.wrapper}>
       <InlineField label="Device">
-        <Select
-          allowCustomValue
-          onChange={onChangeName}
-          options={nameSelectOptions}
-          value={dataFrameOptions.name}
-        />
+        <Select allowCustomValue onChange={onChangeName} options={nameSelectOptions} value={dataFrameOptions.name} />
       </InlineField>
 
       <InlineField label="Facility">
@@ -216,7 +211,6 @@ const isLabelInSelectOptions = (label: string, selectOptions: SelectOptions[]): 
   return !!selectOptions.find(({ value }) => value === label)
 }
 
-
 const getNameSelectOptions = (context: StandardEditorContext<any>): SelectOptions[] => {
   let includedNames: string[] = []
   let selectOptions: SelectOptions[] = []
@@ -226,7 +220,7 @@ const getNameSelectOptions = (context: StandardEditorContext<any>): SelectOption
       includedNames.push(name)
       selectOptions.push({
         value: name,
-        label: name
+        label: name,
       })
     }
   })

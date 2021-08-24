@@ -14,12 +14,7 @@ interface Props {
   sensorOptions: SensorOptions
 }
 
-export const SensorDefault: React.FC<Props> = ({
-  fill,
-  floorPlanOptions,
-  dataFramesWithSettings,
-  sensorOptions,
-}) => {
+export const SensorDefault: React.FC<Props> = ({ fill, floorPlanOptions, dataFramesWithSettings, sensorOptions }) => {
   const lineHeight = 1.2
   const pulseScale = 2.3
   const pulseSpeed = '3s'
