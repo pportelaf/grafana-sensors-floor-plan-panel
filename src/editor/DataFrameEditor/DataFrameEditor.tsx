@@ -24,10 +24,17 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
   let dataFrameOptions: DataFrameOptions = {
     ...value,
   }
-  const dataFramesLabels = getDataFramesLabels(context, sensorType)
+  const nameSelectOptions = getNameSelectOptions(context)
+  const dataFramesLabels = getDataFramesLabels(context, dataFrameOptions)
   const facilitySelectOptions = getFacilitySelectOptions(dataFramesLabels, dataFrameOptions)
   const locationSelectOptions = getLocationSelectOptions(dataFramesLabels, dataFrameOptions)
   const fieldNameSelectOptions = getFieldNameSelectOptions(dataFramesLabels, dataFrameOptions)
+
+  const onChangeName = ({ value }: any) => {
+    dataFrameOptions.name = value
+
+    onChange(dataFrameOptions)
+  }
 
   const onChangeFacility = ({ value }: any) => {
     dataFrameOptions.facility = value
@@ -79,6 +86,15 @@ export const DataFrameEditor: React.FC<Props> = ({ context, onChange, sensorType
 
   return (
     <div className={styles.wrapper}>
+      <InlineField label="Device">
+        <Select
+          allowCustomValue
+          onChange={onChangeName}
+          options={nameSelectOptions}
+          value={dataFrameOptions.name}
+        />
+      </InlineField>
+
       <InlineField label="Facility">
         <Select
           allowCustomValue
@@ -200,10 +216,33 @@ const isLabelInSelectOptions = (label: string, selectOptions: SelectOptions[]): 
   return !!selectOptions.find(({ value }) => value === label)
 }
 
-const getDataFramesLabels = (context: StandardEditorContext<any>, sensorType: SensorType): Labels[] => {
-  let labels: Labels[] = []
 
-  filterDataFramesByMeasurement(context.data || [], sensorType).forEach((dataFrame) => {
+const getNameSelectOptions = (context: StandardEditorContext<any>): SelectOptions[] => {
+  let includedNames: string[] = []
+  let selectOptions: SelectOptions[] = []
+
+  context.data.forEach(({ name }) => {
+    if (name && !includedNames.includes(name)) {
+      includedNames.push(name)
+      selectOptions.push({
+        value: name,
+        label: name
+      })
+    }
+  })
+
+  return selectOptions
+}
+
+const getDataFramesLabels = (context: StandardEditorContext<any>, { name }: DataFrameOptions): Labels[] => {
+  let labels: Labels[] = []
+  let dataFrames: DataFrame[] = context.data
+
+  if (name) {
+    dataFrames = filterDataFramesByName(context.data || [], name)
+  }
+
+  dataFrames.forEach((dataFrame) => {
     dataFrame.fields.forEach((field) => {
       if (field.type !== 'time' && field.labels) {
         labels.push({ ...field.labels, name: field.name })
@@ -214,8 +253,8 @@ const getDataFramesLabels = (context: StandardEditorContext<any>, sensorType: Se
   return labels
 }
 
-const filterDataFramesByMeasurement = (dataFrames: DataFrame[], sensorType: SensorType): DataFrame[] => {
-  return dataFrames.filter((dataFrame) => dataFrame.name === sensorType)
+const filterDataFramesByName = (dataFrames: DataFrame[], name: string): DataFrame[] => {
+  return dataFrames.filter((dataFrame) => dataFrame.name === name)
 }
 
 const getStyles = (theme: GrafanaTheme2) => {
