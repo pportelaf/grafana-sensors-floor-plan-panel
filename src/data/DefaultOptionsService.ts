@@ -45,10 +45,10 @@ export class DefaultOptionsService {
     let orientation: Orientation | undefined
     let side: Side | undefined
 
-    sensorType = sensorType || SensorType.AirQuality
+    sensorType = sensorType || SensorType.Default
 
     switch (sensorType) {
-      case SensorType.AirQuality:
+      case SensorType.Default:
         radius = 10
         fontSize = this.fontSize
         orientation = Orientation.Left

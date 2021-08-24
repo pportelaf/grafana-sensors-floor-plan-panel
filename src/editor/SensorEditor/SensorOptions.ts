@@ -13,7 +13,7 @@ export enum Side {
 }
 
 export enum SensorType {
-  AirQuality = 'air-quality',
+  Default = 'default',
   Door = 'door',
   WaterLevel = 'water-level',
 }
