@@ -11,7 +11,7 @@ Download the zipped panel and follow these steps [https://grafana.com/docs/grafa
 ## Sensor types
 
 These are the supported sensors:
-- `air-quality`: supports multiple value display.
+- `default`: displays a circle pulse ripple and a list of multiple fields.
 - `door`: a door is shown, open (1) or closed (0), depending on the value.
 - `water-level`: displays a single value.
 
