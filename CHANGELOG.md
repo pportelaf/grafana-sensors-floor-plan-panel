@@ -15,3 +15,8 @@
 ## 1.1.1
 
 - Fix SensorAirQuality margin text
+
+## 2.0.0
+
+- Allow to configure name to data frame in editor
+- Rename AirQuality sensor to Default
