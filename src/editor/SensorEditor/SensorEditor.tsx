@@ -179,6 +179,7 @@ export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
     dataFramesOptionsList.push({
       facility: '',
       location: '',
+      name: '',
       fieldName: '',
       thresholds: [],
       unit: '',

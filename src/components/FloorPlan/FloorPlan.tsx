@@ -21,16 +21,6 @@ export const FloorPlan: React.FC<Props> = ({ dataFrames, value }) => {
   x = x + strokeWidth / 2
   y = y + strokeWidth / 2
 
-  const isDataFrameRequiredForSensor = (dataFrame: DataFrame, dataFrameOptions: DataFrameOptions) => {
-    return dataFrame.fields.some((field) => {
-      return (
-        dataFrameOptions.fieldName === field.name &&
-        dataFrameOptions.facility === field.labels?.facility &&
-        dataFrameOptions.location === field.labels?.location
-      )
-    })
-  }
-
   const getDataFramesWithSettings = (dataFrameOptionsList: DataFrameOptions[]): DataFrameWithSettings[] => {
     const dataFrameWithSettings: DataFrameWithSettings[] = []
 
@@ -46,6 +36,16 @@ export const FloorPlan: React.FC<Props> = ({ dataFrames, value }) => {
     })
 
     return dataFrameWithSettings
+  }
+
+  const isDataFrameRequiredForSensor = (dataFrame: DataFrame, dataFrameOptions: DataFrameOptions) => {
+    return dataFrame.fields.some((field) => {
+      return (
+        dataFrameOptions.fieldName === field.name &&
+        dataFrameOptions.facility === field.labels?.facility &&
+        dataFrameOptions.location === field.labels?.location
+      )
+    })
   }
 
   const getSensorList = () => {
