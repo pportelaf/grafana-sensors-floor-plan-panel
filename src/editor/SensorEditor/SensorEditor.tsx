@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react'
 import { GrafanaTheme2, StandardEditorContext } from '@grafana/data'
 import { RadioButtonGroup, InlineField, useStyles2, useTheme2, Button } from '@grafana/ui'
 import { css } from 'emotion'
+import cloneDeep from 'lodash.clonedeep'
 import { DefaultOptionsService } from 'data/DefaultOptionsService'
 import { DataFrameOptions } from 'editor/DataFrameEditor/DataFrameOptions'
 import { Orientation, SensorOptions, SensorType, Side } from './SensorOptions'
@@ -144,7 +145,7 @@ export const SensorEditor: React.FC<Props> = ({ context, onChange, value }) => {
   }
 
   const onCopyDataFrame = (index: number) => {
-    let dataFrame = { ...dataFramesOptionsList[index] }
+    let dataFrame = cloneDeep(dataFramesOptionsList[index])
 
     dataFramesOptionsList.push(dataFrame)
     sensorOptions.dataFramesOptionsList = [...dataFramesOptionsList]
